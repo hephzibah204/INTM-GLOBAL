@@ -239,6 +239,37 @@
 
   .section-intro { font-size: 17px; color: var(--mid); max-width: 600px; line-height: 1.75; }
 
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(44, 44, 44, 0.6); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+    opacity: 0; transition: opacity .3s ease;
+  }
+  .modal-overlay.active { display: flex; opacity: 1; }
+  .modal-content {
+    background: white; border-radius: 12px; padding: 40px;
+    width: 90%; max-width: 480px; position: relative;
+    box-shadow: 0 24px 48px var(--shadow);
+    transform: translateY(20px); transition: transform .3s ease;
+  }
+  .modal-overlay.active .modal-content { transform: translateY(0); }
+  .close-btn {
+    position: absolute; top: 20px; right: 24px; font-size: 28px;
+    color: var(--soft); cursor: pointer; transition: color .2s; line-height: 1;
+  }
+  .close-btn:hover { color: var(--charcoal); }
+  .modal-content h3 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px; color: var(--sage-dark); }
+  .modal-content p { color: var(--mid); font-size: 14px; margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; text-align: left; }
+  .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--charcoal); margin-bottom: 6px; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 12px 16px; border: 1.5px solid var(--border);
+    border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    transition: border-color .2s; outline: none; background: var(--cream);
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--sage); }
+
   /* ─── TEAM ─── */
   #team { background: white; }
   .team-header { text-align: center; margin-bottom: 56px; }
@@ -706,7 +737,7 @@
     <li><a href="#workshops">Workshops</a></li>
     <li><a href="#projects">Projects</a></li>
   </ul>
-  <a href="#membership" class="nav-cta">Join INTM</a>
+  <a href="javascript:void(0)" onclick="openModal()" class="nav-cta">Join INTM</a>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
@@ -735,7 +766,7 @@
       </p>
       <div class="hero-actions">
         <a href="#courses" class="btn-primary">Explore Courses</a>
-        <a href="#membership" class="btn-secondary">Become a Member</a>
+        <a href="javascript:void(0)" onclick="openModal()" class="btn-secondary">Become a Member</a>
       </div>
       <div class="hero-stats">
         <div class="stat">
@@ -951,7 +982,7 @@
         <li>Online community forum access</li>
         <li>Certificate of membership</li>
       </ul>
-      <a href="#" class="mem-btn mem-btn-outline">Get Started</a>
+      <a href="javascript:void(0)" onclick="openModal('Associate')" class="mem-btn mem-btn-outline">Get Started</a>
     </div>
     <div class="mem-card featured reveal">
       <div class="mem-badge">Most Popular</div>
@@ -968,7 +999,7 @@
         <li>Peer mentoring programme</li>
         <li>Professional indemnity support</li>
       </ul>
-      <a href="#" class="mem-btn mem-btn-solid">Join Now</a>
+      <a href="javascript:void(0)" onclick="openModal('Full Member')" class="mem-btn mem-btn-solid">Join Now</a>
     </div>
     <div class="mem-card reveal">
       <h3>Fellow</h3>
@@ -984,7 +1015,7 @@
         <li>Co-branding opportunities</li>
         <li>Leadership &amp; speaking invites</li>
       </ul>
-      <a href="#" class="mem-btn mem-btn-outline">Apply Now</a>
+      <a href="javascript:void(0)" onclick="openModal('Fellow')" class="mem-btn mem-btn-outline">Apply Now</a>
     </div>
   </div>
 </section>
@@ -1014,10 +1045,14 @@
     </div>
     <div class="partner-logos reveal" style="display: flex; flex-direction: column; justify-content: center; gap: 32px;">
       <div class="partner-logo-card" style="padding: 40px; min-height: 200px; border: none; box-shadow: 0 4px 20px var(--shadow);">
-         <img src="./Images/partners/ifsqm.png" alt="IFSQM Logo" style="max-width: 100%; height: auto; max-height: 160px;">
+         <a href="https://ifoodsafety.org" target="_blank" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+           <img src="./Images/partners/ifsqm.png" alt="IFSQM Logo" style="max-width: 100%; height: auto; max-height: 160px;">
+         </a>
       </div>
       <div class="partner-logo-card" style="padding: 40px; min-height: 200px; border: none; box-shadow: 0 4px 20px var(--shadow);">
-         <img src="./Images/partners/collegeoffoodsafety.png" alt="College of Food Safety Management Logo" style="max-width: 100%; height: auto; max-height: 160px;">
+         <a href="https://ifoodsafety.org.ng" target="_blank" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+           <img src="./Images/partners/collegeoffoodsafety.png" alt="College of Food Safety Management Logo" style="max-width: 100%; height: auto; max-height: 160px;">
+         </a>
       </div>
     </div>
   </div>
@@ -1213,7 +1248,7 @@
   </div>
   <div class="cta-actions">
     <a href="#courses" class="btn-white">View Courses</a>
-    <a href="#membership" class="btn-outline-white">Become a Member</a>
+    <a href="javascript:void(0)" onclick="openModal()" class="btn-outline-white">Become a Member</a>
   </div>
 </div>
 
@@ -1272,7 +1307,73 @@
   </div>
 </footer>
 
+<!-- MEMBERSHIP MODAL -->
+<div id="membershipModal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h3>Join INTM Global</h3>
+    <p>Register your interest in our professional membership.</p>
+    <form id="membershipForm" onsubmit="submitForm(event)">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="Dr. Jane Doe">
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="jane@example.com">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required placeholder="+234...">
+      </div>
+      <div class="form-group">
+        <label for="tier">Membership Tier</label>
+        <select id="tier" name="tier" required>
+          <option value="" disabled selected>Select a Tier</option>
+          <option value="Associate">Associate Member</option>
+          <option value="Full Member">Full Member</option>
+          <option value="Fellow">Fellow</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Submit Application</button>
+    </form>
+  </div>
+</div>
+
 <script>
+  // Modal Logic
+  const modal = document.getElementById('membershipModal');
+  
+  function openModal(tier = '') {
+    modal.classList.add('active');
+    if(tier) {
+      const select = document.getElementById('tier');
+      if(select) select.value = tier;
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+  }
+
+  modal.addEventListener('click', (e) => {
+    if(e.target === modal) closeModal();
+  });
+
+  function submitForm(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const tier = document.getElementById('tier').value;
+    
+    const subject = encodeURIComponent(`Membership Application: ${tier} - ${name}`);
+    const body = encodeURIComponent(`Hello INTM Global,\n\nI am interested in joining as a ${tier}.\n\nDetails:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nPlease let me know the next steps.\n\nBest regards,\n${name}`);
+    
+    window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
+    closeModal();
+  }
+
   // Scroll spy for nav
   window.addEventListener('scroll', () => {
     const nav = document.getElementById('navbar');
