@@ -102,6 +102,31 @@
     position: relative;
     overflow: hidden;
   }
+  
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-image-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(90,122,94,0.15);
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .hero-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
 
   .hero-bg {
     position: absolute; inset: 0;
@@ -639,6 +664,8 @@
   }
 
   @media (max-width: 768px) {
+    .hero-layout { grid-template-columns: 1fr; gap: 40px; }
+    .hero-image-wrapper { margin-top: 20px; }
     .nav-links { display: none; }
     .nav-cta { display: none; }
     .hamburger { display: flex; }
@@ -699,29 +726,34 @@
   <div class="hero-bg"></div>
   <div class="hero-leaf"></div>
   <div class="hero-leaf-2"></div>
-  <div class="hero-content">
-    <div class="hero-badge">Advancing Nutritional Science Since 2010</div>
-    <h1>Nourish Knowledge.<br><em>Transform Lives.</em></h1>
-    <p class="hero-sub">
-      The Institute of Nutritional Therapy Management (INTM) is a leading centre for evidence-based nutritional education, professional development, and transformative research across Africa and beyond.
-    </p>
-    <div class="hero-actions">
-      <a href="#courses" class="btn-primary">Explore Courses</a>
-      <a href="#membership" class="btn-secondary">Become a Member</a>
+  <div class="hero-layout">
+    <div class="hero-content">
+      <div class="hero-badge">Advancing Nutritional Science Since 2025</div>
+      <h1>Nourish Knowledge.<br><em>Transform Lives.</em></h1>
+      <p class="hero-sub">
+        The Institute of Nutritional Therapy Management (INTM) is a leading centre for evidence-based nutritional education, professional development, and transformative research across Africa and beyond.
+      </p>
+      <div class="hero-actions">
+        <a href="#courses" class="btn-primary">Explore Courses</a>
+        <a href="#membership" class="btn-secondary">Become a Member</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">2,800+</span>
+          <span class="stat-label">Graduates</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">14</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">40+</span>
+          <span class="stat-label">Programs</span>
+        </div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <span class="stat-num">2,800+</span>
-        <span class="stat-label">Graduates</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">14</span>
-        <span class="stat-label">Countries</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">40+</span>
-        <span class="stat-label">Programs</span>
-      </div>
+    <div class="hero-image-wrapper">
+      <img src="./Images/Others/hero_nutrition.png" alt="Nutritional Therapy Consultation">
     </div>
   </div>
 </section>
