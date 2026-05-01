@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTM Global | About</title>
+  <title>INTM Global | About Us</title>
   <meta name="description" content="Learn about INTM Global—our mission, approach, and commitment to evidence-based nutritional therapy education, research, and professional development.">
   <meta name="keywords" content="about INTM, nutritional therapy institute, mission, evidence-based nutrition">
-  <meta property="og:title" content="INTM Global | About">
+  <meta property="og:title" content="INTM Global | About Us">
   <meta property="og:description" content="Mission-driven education, research, and community impact in nutritional therapy.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="./Images/logo/intmgloballogo.jpg">
@@ -26,11 +26,40 @@
     </a>
     <ul class="nav-links">
       <li><a href="./index.html">Home</a></li>
-      <li><a href="./courses.html">Courses</a></li>
-      <li><a href="./membership.html">Membership</a></li>
-      <li><a href="./collaborations.html">Collaborations</a></li>
-      <li><a href="./workshops.html">Workshops</a></li>
-      <li><a href="./projects.html">Projects</a></li>
+      <li class="nav-dropdown">
+        <details>
+          <summary>Programs <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./courses.html">Courses</a>
+            <a href="./workshops.html">Workshops</a>
+            <a href="./membership.html">Membership</a>
+            <a href="./projects.html">Projects</a>
+          </div>
+        </details>
+      </li>
+      <li class="nav-dropdown">
+        <details>
+          <summary>Collaborations <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./collaborations.html">Partners</a>
+            <a href="./collaboration-form.html">Become a Collaborator</a>
+          </div>
+        </details>
+      </li>
+      <li class="nav-dropdown">
+        <details open>
+          <summary>Institute <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./about.html" aria-current="page">About Us</a>
+            <a href="./team.html">Our Team</a>
+            <a href="./accreditation.html">Accreditation</a>
+            <a href="./reports.html">Annual Reports</a>
+            <a href="./careers.html">Careers</a>
+            <a href="./verify.html">Verify Credentials</a>
+            <a href="./contact.html">Contact</a>
+          </div>
+        </details>
+      </li>
     </ul>
     <a href="./membership.html" class="nav-cta">Join INTM</a>
     <div class="hamburger" id="hamburger" onclick="toggleMenu()">
@@ -40,11 +69,22 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="./index.html" onclick="toggleMenu()">Home</a>
-    <a href="./courses.html" onclick="toggleMenu()">Courses &amp; Training</a>
+    <div class="mobile-menu-title">Programs</div>
+    <a href="./courses.html" onclick="toggleMenu()">Courses</a>
+    <a href="./workshops.html" onclick="toggleMenu()">Workshops</a>
     <a href="./membership.html" onclick="toggleMenu()">Membership</a>
-    <a href="./collaborations.html" onclick="toggleMenu()">Collaborations</a>
-    <a href="./workshops.html" onclick="toggleMenu()">Workshops &amp; Seminars</a>
     <a href="./projects.html" onclick="toggleMenu()">Projects</a>
+    <div class="mobile-menu-title">Collaborations</div>
+    <a href="./collaborations.html" onclick="toggleMenu()">Partners</a>
+    <a href="./collaboration-form.html" onclick="toggleMenu()">Become a Collaborator</a>
+    <div class="mobile-menu-title">Institute</div>
+    <a href="./about.html" onclick="toggleMenu()">About Us</a>
+    <a href="./team.html" onclick="toggleMenu()">Our Team</a>
+    <a href="./accreditation.html" onclick="toggleMenu()">Accreditation</a>
+    <a href="./reports.html" onclick="toggleMenu()">Annual Reports</a>
+    <a href="./careers.html" onclick="toggleMenu()">Careers</a>
+    <a href="./verify.html" onclick="toggleMenu()">Verify Credentials</a>
+    <a href="./contact.html" onclick="toggleMenu()">Contact</a>
   </div>
 
   <main>

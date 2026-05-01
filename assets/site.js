@@ -63,4 +63,60 @@
       window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
     });
   }
+
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nameEl = document.getElementById('contact-name');
+      const emailEl = document.getElementById('contact-email');
+      const phoneEl = document.getElementById('contact-phone');
+      const subjectEl = document.getElementById('contact-subject');
+      const messageEl = document.getElementById('contact-message');
+
+      const name = nameEl ? nameEl.value : '';
+      const email = emailEl ? emailEl.value : '';
+      const phone = phoneEl ? phoneEl.value : '';
+      const subjectText = subjectEl ? subjectEl.value : '';
+      const message = messageEl ? messageEl.value : '';
+
+      const subject = encodeURIComponent(subjectText ? `Contact: ${subjectText}` : 'Website Contact');
+      const body = encodeURIComponent(
+        `Hello INTM Global,\n\n${message}\n\nContact details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nBest regards,\n${name}`
+      );
+
+      window.location.href = `mailto:info@intm.org.ng?subject=${subject}&body=${body}`;
+    });
+  }
+
+  const collaborationForm = document.getElementById('collaborationForm');
+  if (collaborationForm) {
+    collaborationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const orgEl = document.getElementById('collab-org');
+      const nameEl = document.getElementById('collab-name');
+      const emailEl = document.getElementById('collab-email');
+      const phoneEl = document.getElementById('collab-phone');
+      const websiteEl = document.getElementById('collab-website');
+      const typeEl = document.getElementById('collab-type');
+      const messageEl = document.getElementById('collab-message');
+
+      const org = orgEl ? orgEl.value : '';
+      const name = nameEl ? nameEl.value : '';
+      const email = emailEl ? emailEl.value : '';
+      const phone = phoneEl ? phoneEl.value : '';
+      const website = websiteEl ? websiteEl.value : '';
+      const collabType = typeEl ? typeEl.value : '';
+      const message = messageEl ? messageEl.value : '';
+
+      const subject = encodeURIComponent(`Collaboration Request: ${collabType || 'Enquiry'} - ${org || name}`);
+      const body = encodeURIComponent(
+        `Hello INTM Global,\n\nI would like to collaborate with INTM.\n\nMessage:\n${message}\n\nDetails:\nOrganisation: ${org}\nContact person: ${name}\nEmail: ${email}\nPhone: ${phone}\nWebsite: ${website}\nCollaboration type: ${collabType}\n\nBest regards,\n${name}`
+      );
+
+      window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
+    });
+  }
 })();
