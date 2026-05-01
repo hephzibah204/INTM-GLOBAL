@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INTM – Institute of Nutritional Therapy Management</title>
+<title>INTM Global | Verify Credentials</title>
+<meta name="description" content="Verify INTM Global certificates and membership status. Use this portal to validate credentials and request support if needed.">
+<meta name="keywords" content="certificate verification, membership verification, INTM verification, credentials">
+<meta property="og:title" content="INTM Global | Verify Credentials">
+<meta property="og:description" content="Verify certificates and membership status with INTM Global.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="./Images/logo/intmgloballogo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://intmglobal.org/verify.html">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/styles.css">
 <style>
   :root {
     --sage: #5a7a5e;
@@ -722,7 +731,7 @@
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#home" class="nav-logo">
+  <a href="./index.html" class="nav-logo">
     <img src="./Images/logo/intmgloballogo.jpg" alt="INTM Logo" style="height: 52px; width: auto; object-fit: contain;">
     <div class="nav-logo-text">
       <strong>INTM</strong>
@@ -730,533 +739,109 @@
     </div>
   </a>
   <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#membership">Membership</a></li>
-    <li><a href="#collaborations">Collaborations</a></li>
-    <li><a href="#workshops">Workshops</a></li>
-    <li><a href="#projects">Projects</a></li>
+    <li><a href="./index.html">Home</a></li>
+    <li><a href="./courses.html">Courses</a></li>
+    <li><a href="./membership.html">Membership</a></li>
+    <li><a href="./collaborations.html">Collaborations</a></li>
+    <li><a href="./workshops.html">Workshops</a></li>
+    <li><a href="./projects.html">Projects</a></li>
   </ul>
-  <a href="javascript:void(0)" onclick="openModal()" class="nav-cta">Join INTM</a>
+  <a href="./membership.html" class="nav-cta">Join INTM</a>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#home" onclick="toggleMenu()">Home</a>
-  <a href="#courses" onclick="toggleMenu()">Courses & Training</a>
-  <a href="#membership" onclick="toggleMenu()">Membership</a>
-  <a href="#collaborations" onclick="toggleMenu()">Collaborations</a>
-  <a href="#workshops" onclick="toggleMenu()">Workshops & Seminars</a>
-  <a href="#projects" onclick="toggleMenu()">Projects</a>
+  <a href="./index.html" onclick="toggleMenu()">Home</a>
+  <a href="./courses.html" onclick="toggleMenu()">Courses & Training</a>
+  <a href="./membership.html" onclick="toggleMenu()">Membership</a>
+  <a href="./collaborations.html" onclick="toggleMenu()">Collaborations</a>
+  <a href="./workshops.html" onclick="toggleMenu()">Workshops & Seminars</a>
+  <a href="./projects.html" onclick="toggleMenu()">Projects</a>
 </div>
 
-<!-- HOME / HERO -->
-<section id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-leaf"></div>
-  <div class="hero-leaf-2"></div>
-  <div class="hero-layout">
-    <div class="hero-content">
-      <div class="hero-badge">Advancing Nutritional Science Since 2025</div>
-      <h1>Nourish Knowledge.<br><em>Transform Lives.</em></h1>
-      <p class="hero-sub">
-        The Institute of Nutritional Therapy Management (INTM) is a leading centre for evidence-based nutritional education, professional development, and transformative research across Africa and beyond.
-      </p>
-      <div class="hero-actions">
-        <a href="#courses" class="btn-primary">Explore Courses</a>
-        <a href="javascript:void(0)" onclick="openModal()" class="btn-secondary">Become a Member</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">2,800+</span>
-          <span class="stat-label">Graduates</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">14</span>
-          <span class="stat-label">Countries</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">40+</span>
-          <span class="stat-label">Programs</span>
-        </div>
-      </div>
+<!-- VERIFICATION SECTION -->
+<section id="verification" style="min-height: 80vh; padding: 160px 5% 80px; display: flex; align-items: center; justify-content: center; background: var(--warm-white);">
+  <div style="background: white; border-radius: 12px; padding: 48px; width: 100%; max-width: 540px; box-shadow: 0 24px 48px var(--shadow);">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h2 style="margin-bottom: 8px;">Verify <em>Credentials</em></h2>
+      <p style="color: var(--mid); font-size: 15px;">Enter your details to verify your Certificate or Membership status with INTM Global.</p>
     </div>
-    <div class="hero-image-wrapper">
-      <img src="./Images/Others/hero_nutrition.png" alt="Nutritional Therapy Consultation">
+
+    <!-- TABS -->
+    <div style="display: flex; gap: 10px; margin-bottom: 32px; border-bottom: 2px solid var(--border);">
+      <button onclick="switchTab('cert')" id="tab-cert" style="flex: 1; padding: 12px; background: none; border: none; border-bottom: 3px solid var(--sage); color: var(--sage-dark); font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.3s; font-size: 15px;">Certificate</button>
+      <button onclick="switchTab('mem')" id="tab-mem" style="flex: 1; padding: 12px; background: none; border: none; border-bottom: 3px solid transparent; color: var(--soft); font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.3s; font-size: 15px;">Membership</button>
+    </div>
+
+    <!-- CERTIFICATE FORM -->
+    <form id="form-cert" onsubmit="verifyCredential(event, 'Certificate')">
+      <div class="form-group">
+        <label for="cert-name">Full Name</label>
+        <input type="text" id="cert-name" required placeholder="e.g. Jane Doe">
+      </div>
+      <div class="form-group">
+        <label for="cert-id">Certificate ID</label>
+        <input type="text" id="cert-id" required placeholder="e.g. INTM-CERT-2025-XXXX">
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px; border: none; cursor: pointer;">Verify Certificate</button>
+    </form>
+
+    <!-- MEMBERSHIP FORM -->
+    <form id="form-mem" onsubmit="verifyCredential(event, 'Membership')" style="display: none;">
+      <div class="form-group">
+        <label for="mem-name">Full Name</label>
+        <input type="text" id="mem-name" required placeholder="e.g. Dr. John Smith">
+      </div>
+      <div class="form-group">
+        <label for="mem-id">Membership ID</label>
+        <input type="text" id="mem-id" required placeholder="e.g. INTM-MEM-XXXX">
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px; border: none; cursor: pointer;">Verify Membership</button>
+    </form>
+
+    <!-- RESULT AREA -->
+    <div id="verify-result" style="display: none; margin-top: 24px; padding: 16px; border-radius: 8px; text-align: center; font-size: 14px; font-weight: 500;">
     </div>
   </div>
 </section>
 
-<!-- ABOUT STRIP -->
-<div class="about-strip reveal">
-  <div>
-    <div class="section-label" style="color:var(--earth-light);">
-      <span style="background:var(--earth-light);height:1px;width:28px;display:inline-block;"></span>
-      Our Mission
-    </div>
-    <h2>Bridging <em>Nutrition Science</em> with Real-World Practice</h2>
-    <p>INTM exists to empower nutritionists, dietitians, health coaches, and allied health professionals with world-class training, cutting-edge research, and a thriving professional community — driving measurable improvements in population health.</p>
-  </div>
-  <div class="about-pillars">
-    <div class="pillar">
-      <div class="pillar-icon">🎓</div>
-      <h4>Education</h4>
-      <p>Accredited, evidence-based programs tailored to all career stages.</p>
-    </div>
-    <div class="pillar">
-      <div class="pillar-icon">🔬</div>
-      <h4>Research</h4>
-      <p>Pioneering studies in therapeutic nutrition and food systems.</p>
-    </div>
-    <div class="pillar">
-      <div class="pillar-icon">🤝</div>
-      <h4>Community</h4>
-      <p>A vibrant professional network spanning 14+ countries.</p>
-    </div>
-    <div class="pillar">
-      <div class="pillar-icon">🌍</div>
-      <h4>Impact</h4>
-      <p>Policy advocacy and community nutrition programmes at scale.</p>
-    </div>
-  </div>
-</div>
+<script>
+  function switchTab(tab) {
+    document.getElementById('form-cert').style.display = tab === 'cert' ? 'block' : 'none';
+    document.getElementById('form-mem').style.display = tab === 'mem' ? 'block' : 'none';
+    
+    document.getElementById('tab-cert').style.borderColor = tab === 'cert' ? 'var(--sage)' : 'transparent';
+    document.getElementById('tab-cert').style.color = tab === 'cert' ? 'var(--sage-dark)' : 'var(--soft)';
+    
+    document.getElementById('tab-mem').style.borderColor = tab === 'mem' ? 'var(--sage)' : 'transparent';
+    document.getElementById('tab-mem').style.color = tab === 'mem' ? 'var(--sage-dark)' : 'var(--soft)';
+    
+    document.getElementById('verify-result').style.display = 'none';
+  }
 
-<!-- INSTITUTE MEMBERS -->
-<section id="professional-members">
-  <div class="team-header reveal">
-    <div class="section-label">Professional Body</div>
-    <h2>Our <em>Members</em></h2>
-    <p class="section-intro">Recognised professionals committed to advancing nutritional therapy and food safety standards globally.</p>
-  </div>
-  <div class="team-grid">
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture2.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Fellow (FINTM)</p>
-    </div>
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture3.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Full Member (MINTM)</p>
-    </div>
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture9.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Fellow (FINTM)</p>
-    </div>
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture10.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Full Member (MINTM)</p>
-    </div>
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture11.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Fellow (FINTM)</p>
-    </div>
-    <div class="team-card reveal">
-      <div class="team-img-wrapper">
-        <img src="./Images/members/Picture12.png" alt="Professional Member">
-      </div>
-      <h3>Member Name</h3>
-      <p>Full Member (MINTM)</p>
-    </div>
-  </div>
-</section>
-
-<!-- COURSES -->
-<section id="courses">
-  <div class="courses-header reveal">
-    <div>
-      <div class="section-label">Courses &amp; Training</div>
-      <h2>Programs Designed for <em>Real Impact</em></h2>
-      <p class="section-intro">From foundational nutrition principles to advanced clinical therapy, our courses equip you with practical skills and recognised credentials.</p>
-    </div>
-    <a href="#" class="btn-secondary">View All Courses →</a>
-  </div>
-  <div class="course-grid">
-    <div class="course-card reveal">
-      <div class="course-card-top bg-green">🥗</div>
-      <div class="course-card-body">
-        <div class="course-level">Certificate · Beginner</div>
-        <h3>Foundations of Nutritional Therapy</h3>
-        <p>An essential introduction to nutritional science, macronutrients, micronutrients, and therapeutic diet planning for health professionals.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>12 weeks</span></div>
-          <span class="tag">Online</span>
-        </div>
-      </div>
-    </div>
-    <div class="course-card reveal">
-      <div class="course-card-top bg-earth">🩺</div>
-      <div class="course-card-body">
-        <div class="course-level">Diploma · Intermediate</div>
-        <h3>Clinical Nutritional Therapy</h3>
-        <p>Advanced clinical assessment, therapeutic protocols, and management of chronic diseases through nutritional interventions.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>6 months</span></div>
-          <span class="tag">Hybrid</span>
-        </div>
-      </div>
-    </div>
-    <div class="course-card reveal">
-      <div class="course-card-top bg-teal">🧬</div>
-      <div class="course-card-body">
-        <div class="course-level">Certificate · Advanced</div>
-        <h3>Nutrigenomics &amp; Personalised Nutrition</h3>
-        <p>Explore the intersection of genetics and nutrition to deliver precision dietary recommendations for diverse populations.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>10 weeks</span></div>
-          <span class="tag">Online</span>
-        </div>
-      </div>
-    </div>
-    <div class="course-card reveal">
-      <div class="course-card-top bg-purple">👶</div>
-      <div class="course-card-body">
-        <div class="course-level">Certificate · Specialist</div>
-        <h3>Maternal &amp; Paediatric Nutrition</h3>
-        <p>Evidence-based nutritional management across pregnancy, lactation, infancy, and childhood for optimal growth outcomes.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>8 weeks</span></div>
-          <span class="tag">Online</span>
-        </div>
-      </div>
-    </div>
-    <div class="course-card reveal">
-      <div class="course-card-top bg-rose">🏃</div>
-      <div class="course-card-body">
-        <div class="course-level">Certificate · Specialist</div>
-        <h3>Sports &amp; Performance Nutrition</h3>
-        <p>Fuelling elite and recreational athletes for peak performance, recovery, and injury prevention through targeted nutrition strategies.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>8 weeks</span></div>
-          <span class="tag">Online</span>
-        </div>
-      </div>
-    </div>
-    <div class="course-card reveal">
-      <div class="course-card-top bg-blue">🎓</div>
-      <div class="course-card-body">
-        <div class="course-level">Postgraduate · Professional</div>
-        <h3>Advanced Diploma in Nutritional Management</h3>
-        <p>Our flagship postgraduate program covering research methods, community nutrition, policy, and leadership in nutritional management.</p>
-        <div class="course-meta">
-          <div class="course-duration">Duration: <span>12 months</span></div>
-          <span class="tag">Hybrid</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MEMBERSHIP -->
-<section id="membership">
-  <div class="membership-header reveal">
-    <div class="section-label">Membership</div>
-    <h2>Join a <em>Thriving Community</em></h2>
-    <p class="section-intro">INTM membership opens doors to exclusive resources, professional recognition, peer networks, and career advancement opportunities.</p>
-  </div>
-  <div class="membership-grid">
-    <div class="mem-card reveal">
-      <h3>Associate Member</h3>
-      <p style="font-size:14px;color:var(--soft);">Students &amp; newly qualified practitioners</p>
-      <div class="mem-price">₦15,000</div>
-      <div class="mem-period">per year</div>
-      <ul class="mem-features">
-        <li>Access to INTM digital library</li>
-        <li>Quarterly member newsletter</li>
-        <li>Discounted course fees (10%)</li>
-        <li>Online community forum access</li>
-        <li>Certificate of membership</li>
-      </ul>
-      <a href="javascript:void(0)" onclick="openModal('Associate')" class="mem-btn mem-btn-outline">Get Started</a>
-    </div>
-    <div class="mem-card featured reveal">
-      <div class="mem-badge">Most Popular</div>
-      <h3>Full Member</h3>
-      <p style="font-size:14px;color:rgba(255,255,255,0.6);">Qualified nutritionists &amp; dietitians</p>
-      <div class="mem-price">₦35,000</div>
-      <div class="mem-period">per year</div>
-      <ul class="mem-features">
-        <li>All Associate benefits</li>
-        <li>Use of post-nominal MINTM</li>
-        <li>CPD accreditation tracker</li>
-        <li>Priority workshop registration</li>
-        <li>Discounted course fees (20%)</li>
-        <li>Peer mentoring programme</li>
-        <li>Professional indemnity support</li>
-      </ul>
-      <a href="javascript:void(0)" onclick="openModal('Full Member')" class="mem-btn mem-btn-solid">Join Now</a>
-    </div>
-    <div class="mem-card reveal">
-      <h3>Fellow</h3>
-      <p style="font-size:14px;color:var(--soft);">Senior practitioners &amp; academics</p>
-      <div class="mem-price">₦65,000</div>
-      <div class="mem-period">per year</div>
-      <ul class="mem-features">
-        <li>All Full Member benefits</li>
-        <li>Use of post-nominal FINTM</li>
-        <li>Research publication support</li>
-        <li>Seat on advisory committees</li>
-        <li>Free annual conference access</li>
-        <li>Co-branding opportunities</li>
-        <li>Leadership &amp; speaking invites</li>
-      </ul>
-      <a href="javascript:void(0)" onclick="openModal('Fellow')" class="mem-btn mem-btn-outline">Apply Now</a>
-    </div>
-  </div>
-</section>
-
-<!-- COLLABORATIONS -->
-<section id="collaborations">
-  <div class="collab-layout">
-    <div class="collab-content reveal">
-      <div class="section-label">Partnership / Collaboration</div>
-      <h2>Strategic <em>Partnerships</em></h2>
-      <div class="collab-types" style="margin-top: 20px;">
-        <div class="collab-type" style="border-left-color: var(--earth);">
-          <div>
-            <h4 style="font-size: 18px; margin-bottom: 8px;">The Institute Of Food Safety and Quality Management (IFSQM)</h4>
-            <p>The Institute of Food Safety and Quality Management (IFSQM) operates in partnership with the Institute of Nutritional Therapy Management (INTM) to deliver quality training, certification, and professional development in food safety, hygiene, and nutrition.</p>
-            <p style="margin-top: 10px;">This collaboration is committed to advancing professional standards, promoting best practices, and equipping individuals with the knowledge and practical skills required to ensure safe food handling, prevent contamination, and support public health across the food and health sectors.</p>
-          </div>
-        </div>
-        <div class="collab-type" style="border-left-color: var(--earth);">
-          <div>
-            <h4 style="font-size: 18px; margin-bottom: 8px;">College of Food Safety Management</h4>
-            <p>The College of Food Safety Management is a professional training institution focused on promoting food safety, hygiene practices, and quality standards across the food industry.</p>
-            <p style="margin-top: 10px;">In partnership with the Institute of Nutritional Therapy Management, the College provides structured training and certification programs that equip individuals with the knowledge and skills needed to ensure safe food handling, prevent contamination, and support public health.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="partner-logos reveal" style="display: flex; flex-direction: column; justify-content: center; gap: 32px;">
-      <div class="partner-logo-card" style="padding: 40px; min-height: 200px; border: none; box-shadow: 0 4px 20px var(--shadow);">
-         <a href="https://ifoodsafety.org" target="_blank" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-           <img src="./Images/partners/ifsqm.png" alt="IFSQM Logo" style="max-width: 100%; height: auto; max-height: 160px;">
-         </a>
-      </div>
-      <div class="partner-logo-card" style="padding: 40px; min-height: 200px; border: none; box-shadow: 0 4px 20px var(--shadow);">
-         <a href="https://ifoodsafety.org.ng" target="_blank" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-           <img src="./Images/partners/collegeoffoodsafety.png" alt="College of Food Safety Management Logo" style="max-width: 100%; height: auto; max-height: 160px;">
-         </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WORKSHOPS & SEMINARS -->
-<section id="workshops">
-  <div class="workshops-header reveal">
-    <div>
-      <div class="section-label">Workshops &amp; Seminars</div>
-      <h2>Upcoming <em>Learning Events</em></h2>
-      <p class="section-intro">Intensive, practitioner-focused events designed to sharpen clinical skills, spark collaboration, and connect you with thought leaders.</p>
-    </div>
-    <a href="#" class="btn-secondary">All Events →</a>
-  </div>
-  <div class="workshop-list">
-
-    <div class="workshop-item reveal">
-      <div class="workshop-date"><div class="day">12</div><div class="month">May 2025</div></div>
-      <div class="workshop-info">
-        <h3>Gut Microbiome &amp; Nutritional Therapy: Clinical Applications</h3>
-        <div class="meta">
-          <span>🕘 9:00 AM – 4:00 PM WAT</span>
-          <span>📍 Lagos, Nigeria</span>
-          <span>👥 Limit: 60 seats</span>
-        </div>
-        <div class="workshop-type"><span class="badge-live">In-Person</span></div>
-      </div>
-      <div class="workshop-action"><a href="#" class="btn-register">Register</a></div>
-    </div>
-
-    <div class="workshop-item reveal">
-      <div class="workshop-date"><div class="day">28</div><div class="month">May 2025</div></div>
-      <div class="workshop-info">
-        <h3>Nutritional Management of Diabetes &amp; Metabolic Syndrome</h3>
-        <div class="meta">
-          <span>🕘 10:00 AM – 1:00 PM WAT</span>
-          <span>💻 Virtual (Zoom)</span>
-          <span>👥 Limit: 200 seats</span>
-        </div>
-        <div class="workshop-type"><span class="badge-virtual">Virtual</span></div>
-      </div>
-      <div class="workshop-action"><a href="#" class="btn-register">Register</a></div>
-    </div>
-
-    <div class="workshop-item reveal">
-      <div class="workshop-date"><div class="day">14</div><div class="month">Jun 2025</div></div>
-      <div class="workshop-info">
-        <h3>Paediatric Malnutrition: Assessment &amp; Therapeutic Feeding</h3>
-        <div class="meta">
-          <span>🕘 8:30 AM – 5:00 PM WAT</span>
-          <span>📍 Abuja, Nigeria</span>
-          <span>👥 Limit: 40 seats</span>
-        </div>
-        <div class="workshop-type"><span class="badge-live">In-Person Workshop</span></div>
-      </div>
-      <div class="workshop-action"><a href="#" class="btn-register">Register</a></div>
-    </div>
-
-    <div class="workshop-item reveal">
-      <div class="workshop-date"><div class="day">26</div><div class="month">Jul 2025</div></div>
-      <div class="workshop-info">
-        <h3>Annual INTM Nutrition Leadership Symposium 2025</h3>
-        <div class="meta">
-          <span>🕘 9:00 AM – 6:00 PM WAT</span>
-          <span>📍 Eko Hotel, Lagos</span>
-          <span>👥 Limit: 350 seats</span>
-        </div>
-        <div class="workshop-type"><span class="badge-live">Annual Conference</span></div>
-      </div>
-      <div class="workshop-action"><a href="#" class="btn-register">Register</a></div>
-    </div>
-
-    <div class="workshop-item reveal">
-      <div class="workshop-date"><div class="day">09</div><div class="month">Aug 2025</div></div>
-      <div class="workshop-info">
-        <h3>Sports Nutrition Masterclass: Evidence to Practice</h3>
-        <div class="meta">
-          <span>🕘 2:00 PM – 5:00 PM WAT</span>
-          <span>💻 Virtual (Zoom)</span>
-          <span>👥 Limit: 150 seats</span>
-        </div>
-        <div class="workshop-type"><span class="badge-virtual">Virtual</span></div>
-      </div>
-      <div class="workshop-action"><a href="#" class="btn-register">Register</a></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="projects-intro reveal">
-    <div>
-      <div class="section-label">Projects</div>
-      <h2>Research &amp; Community <em>Initiatives</em></h2>
-      <p>INTM leads and supports a portfolio of impactful nutrition projects — spanning community intervention, clinical research, food systems, and public health policy — to address the most pressing nutritional challenges across Africa.</p>
-      <a href="#" class="btn-primary" style="margin-top:28px;display:inline-block;">Our Research Portfolio</a>
-    </div>
-    <div class="impact-nums">
-      <div class="impact-num"><div class="n">18</div><p>Active Projects</p></div>
-      <div class="impact-num"><div class="n">₦120M+</div><p>Research Funding</p></div>
-      <div class="impact-num"><div class="n">50K+</div><p>Lives Reached</p></div>
-      <div class="impact-num"><div class="n">34</div><p>Publications</p></div>
-    </div>
-  </div>
-  <div class="project-grid">
-    <div class="project-card reveal">
-      <div class="project-card-header ph-green"></div>
-      <div class="project-card-body">
-        <div class="project-status status-active">● Active</div>
-        <h3>NutriScreen Nigeria</h3>
-        <p>A nationwide malnutrition screening programme deployed across 200 primary healthcare centres in six states, targeting children under five and pregnant women.</p>
-        <div class="project-tags">
-          <span class="project-tag">Community</span>
-          <span class="project-tag">Paediatric</span>
-          <span class="project-tag">Public Health</span>
-        </div>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-card-header ph-earth"></div>
-      <div class="project-card-body">
-        <div class="project-status status-active">● Active</div>
-        <h3>Maternal Nutrition &amp; Birth Outcomes Study</h3>
-        <p>A longitudinal clinical trial examining the impact of targeted micronutrient supplementation on maternal anaemia and low-birth-weight outcomes in Lagos State.</p>
-        <div class="project-tags">
-          <span class="project-tag">Clinical Research</span>
-          <span class="project-tag">Maternal Health</span>
-        </div>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-card-header ph-teal"></div>
-      <div class="project-card-body">
-        <div class="project-status status-ongoing">◎ Ongoing</div>
-        <h3>Food Systems &amp; Urban Nutrition Atlas</h3>
-        <p>Mapping food access, dietary diversity, and nutritional vulnerability across Nigerian urban centres to inform evidence-based urban food policy.</p>
-        <div class="project-tags">
-          <span class="project-tag">Policy</span>
-          <span class="project-tag">Food Systems</span>
-          <span class="project-tag">Urban Health</span>
-        </div>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-card-header ph-purple"></div>
-      <div class="project-card-body">
-        <div class="project-status status-active">● Active</div>
-        <h3>Gut Health in School-Age Children</h3>
-        <p>Investigating the relationship between dietary fibre intake, gut microbiome diversity, and cognitive performance in Nigerian primary school children.</p>
-        <div class="project-tags">
-          <span class="project-tag">Microbiome</span>
-          <span class="project-tag">Child Nutrition</span>
-          <span class="project-tag">Cognition</span>
-        </div>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-card-header ph-rose"></div>
-      <div class="project-card-body">
-        <div class="project-status status-ongoing">◎ Ongoing</div>
-        <h3>NCD Nutrition Intervention Programme</h3>
-        <p>Structured dietary counselling programme for patients managing Type 2 diabetes, hypertension, and obesity in secondary healthcare facilities.</p>
-        <div class="project-tags">
-          <span class="project-tag">NCD</span>
-          <span class="project-tag">Clinical</span>
-          <span class="project-tag">Counselling</span>
-        </div>
-      </div>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-card-header ph-blue"></div>
-      <div class="project-card-body">
-        <div class="project-status status-completed">✓ Completed</div>
-        <h3>Frontline Nutrition Workers Training Initiative</h3>
-        <p>A completed capacity-building project that trained over 800 community health extension workers in basic nutrition assessment and counselling across 4 states.</p>
-        <div class="project-tags">
-          <span class="project-tag">Capacity Building</span>
-          <span class="project-tag">Community</span>
-          <span class="project-tag">Training</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-banner reveal">
-  <div class="cta-content">
-    <h2>Ready to Begin Your <em>Nutritional Therapy</em> Journey?</h2>
-    <p>Join thousands of practitioners across Africa who are advancing their careers and transforming communities through evidence-based nutritional therapy.</p>
-  </div>
-  <div class="cta-actions">
-    <a href="#courses" class="btn-white">View Courses</a>
-    <a href="javascript:void(0)" onclick="openModal()" class="btn-outline-white">Become a Member</a>
-  </div>
-</div>
-
+  function verifyCredential(e, type) {
+    e.preventDefault();
+    const resultBox = document.getElementById('verify-result');
+    resultBox.style.display = 'block';
+    
+    resultBox.style.background = 'var(--cream)';
+    resultBox.style.color = 'var(--mid)';
+    resultBox.innerHTML = 'Checking database...';
+    
+    setTimeout(() => {
+      resultBox.style.background = 'rgba(181,135,74,0.1)';
+      resultBox.style.color = '#8a5f1e';
+      resultBox.innerHTML = `⚠️ Our digital verification portal is currently undergoing maintenance. <br><br>While we connect our Supabase database, please email <b>direct@intmglobal.org</b> with your ${type} ID to verify its authenticity.`;
+    }, 1500);
+  }
+</script>
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#home" class="nav-logo" style="text-decoration:none;">
+      <a href="./index.html" class="nav-logo" style="text-decoration:none;">
         <img src="./Images/logo/intmgloballogo.jpg" alt="INTM Logo" style="height: 52px; width: auto; object-fit: contain;">
         <div class="nav-logo-text">
           <strong style="color:white;">INTM</strong>
@@ -1268,145 +853,45 @@
     <div class="footer-col">
       <h4>Institute</h4>
       <ul>
-        <li><a href="#">About INTM</a></li>
-        <li><a href="#">Our Team</a></li>
-        <li><a href="#">Accreditation</a></li>
-        <li><a href="#">Annual Reports</a></li>
-        <li><a href="#">Careers</a></li>
+        <li><a href="./about.html">About INTM</a></li>
+        <li><a href="./team.html">Our Team</a></li>
+        <li><a href="./accreditation.html">Accreditation</a></li>
+        <li><a href="./reports.html">Annual Reports</a></li>
+        <li><a href="./careers.html">Careers</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Programs</h4>
       <ul>
-        <li><a href="#courses">All Courses</a></li>
-        <li><a href="#workshops">Workshops</a></li>
-        <li><a href="#projects">Research</a></li>
-        <li><a href="#membership">Membership</a></li>
-        <li><a href="#collaborations">Partnerships</a></li>
+        <li><a href="./courses.html">All Courses</a></li>
+        <li><a href="./workshops.html">Workshops</a></li>
+        <li><a href="./projects.html">Research</a></li>
+        <li><a href="./membership.html">Membership</a></li>
+        <li><a href="./collaborations.html">Partnerships</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Contact</h4>
       <ul>
-        <li><a href="#">📍 14 Nutrition Way, Victoria Island, Lagos</a></li>
-        <li><a href="#">📞 +234 (0) 800 INTM 001</a></li>
-        <li><a href="#">✉️ info@intm.org.ng</a></li>
-        <li><a href="#">🌐 www.intm.org.ng</a></li>
+        <li><a href="https://www.google.com/maps?q=Victoria+Island,+Lagos" target="_blank" rel="noopener">📍 14 Nutrition Way, Victoria Island, Lagos</a></li>
+        <li><a href="tel:+2340800INTM001">📞 +234 (0) 800 INTM 001</a></li>
+        <li><a href="mailto:info@intm.org.ng">✉️ info@intm.org.ng</a></li>
+        <li><a href="https://www.intm.org.ng" target="_blank" rel="noopener">🌐 www.intm.org.ng</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 Institute of Nutritional Therapy Management. All rights reserved.</span>
     <div class="footer-socials">
-      <a href="#" title="Facebook">f</a>
-      <a href="#" title="Twitter">𝕏</a>
-      <a href="#" title="LinkedIn">in</a>
-      <a href="#" title="Instagram">ig</a>
-      <a href="#" title="YouTube">▶</a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+      <a href="https://x.com" target="_blank" rel="noopener" title="Twitter">𝕏</a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener" title="LinkedIn">in</a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener" title="Instagram">ig</a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener" title="YouTube">▶</a>
     </div>
   </div>
 </footer>
 
-<!-- MEMBERSHIP MODAL -->
-<div id="membershipModal" class="modal-overlay">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h3>Join INTM Global</h3>
-    <p>Register your interest in our professional membership.</p>
-    <form id="membershipForm" onsubmit="submitForm(event)">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required placeholder="Dr. Jane Doe">
-      </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required placeholder="jane@example.com">
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required placeholder="+234...">
-      </div>
-      <div class="form-group">
-        <label for="tier">Membership Tier</label>
-        <select id="tier" name="tier" required>
-          <option value="" disabled selected>Select a Tier</option>
-          <option value="Associate">Associate Member</option>
-          <option value="Full Member">Full Member</option>
-          <option value="Fellow">Fellow</option>
-        </select>
-      </div>
-      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Submit Application</button>
-    </form>
-  </div>
-</div>
-
-<script>
-  // Modal Logic
-  const modal = document.getElementById('membershipModal');
-  
-  function openModal(tier = '') {
-    modal.classList.add('active');
-    if(tier) {
-      const select = document.getElementById('tier');
-      if(select) select.value = tier;
-    }
-  }
-
-  function closeModal() {
-    modal.classList.remove('active');
-  }
-
-  modal.addEventListener('click', (e) => {
-    if(e.target === modal) closeModal();
-  });
-
-  function submitForm(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const tier = document.getElementById('tier').value;
-    
-    const subject = encodeURIComponent(`Membership Application: ${tier} - ${name}`);
-    const body = encodeURIComponent(`Hello INTM Global,\n\nI am interested in joining as a ${tier}.\n\nDetails:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nPlease let me know the next steps.\n\nBest regards,\n${name}`);
-    
-    window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
-    closeModal();
-  }
-
-  // Scroll spy for nav
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  });
-
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 60);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  reveals.forEach(r => observer.observe(r));
-
-  // Mobile menu
-  function toggleMenu() {
-    document.getElementById('mobileMenu').classList.toggle('open');
-  }
-
-  // Smooth active nav
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
-</script>
+<script src="./assets/site.js" defer></script>
 </body>
 </html>
