@@ -34,7 +34,7 @@ nav {
   border-bottom: 1px solid var(--border);
   padding: 0 5%;
   display: flex; align-items: center; justify-content: space-between;
-  height: 72px;
+  height: 96px;
   transition: box-shadow .3s;
 }
 nav.scrolled { box-shadow: 0 4px 24px var(--shadow); }
@@ -42,6 +42,7 @@ nav.scrolled { box-shadow: 0 4px 24px var(--shadow); }
 .nav-logo {
   display: flex; align-items: center; gap: 12px; text-decoration: none;
 }
+.nav-logo img { height: 78px !important; width: auto !important; object-fit: contain; }
 .nav-logo-icon {
   width: 44px; height: 44px;
   background: linear-gradient(135deg, var(--sage), var(--sage-dark));
@@ -136,7 +137,7 @@ nav.scrolled { box-shadow: 0 4px 24px var(--shadow); }
 #home {
   min-height: 100vh;
   display: flex; align-items: center;
-  padding: 120px 5% 80px;
+  padding: 144px 5% 80px;
   position: relative;
   overflow: hidden;
 }
@@ -278,7 +279,7 @@ h2 em { color: var(--sage); font-style: italic; }
 .section-intro { font-size: 17px; color: var(--mid); max-width: 600px; line-height: 1.75; }
 
 .page-hero {
-  padding: 120px 5% 60px;
+  padding: 144px 5% 60px;
   background: var(--cream);
 }
 .page-hero h1 {
@@ -739,7 +740,7 @@ footer {
 
 /* ─── MOBILE MENU ─── */
 .mobile-menu {
-  display: none; position: fixed; top: 72px; left: 0; right: 0;
+  display: none; position: fixed; top: 96px; left: 0; right: 0;
   background: var(--cream); border-bottom: 1px solid var(--border);
   padding: 20px 5%; z-index: 998;
   flex-direction: column; gap: 4px;
@@ -761,6 +762,10 @@ footer {
 .mobile-menu a:last-child { border-bottom: none; }
 
 /* ─── RESPONSIVE ─── */
+@media (min-width: 1025px) {
+  .hero-layout { grid-template-columns: 1fr 1.5fr; }
+}
+
 @media (max-width: 1024px) {
   .course-grid, .project-grid, .team-grid { grid-template-columns: repeat(2, 1fr); }
   .about-strip { grid-template-columns: 1fr; gap: 40px; }
