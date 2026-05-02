@@ -124,9 +124,9 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li><a href="https://www.google.com/maps?q=Plot+6,+Block+B,+Akinyode+Family+Layout,+Unity+Estate,+Ibadan" target="_blank" rel="noopener">📍 Plot 6, Block B, Akinyode Family Layout, Unity Estate Off Akala Expressway, Zionist Estate, New Garage, Orita Challenge, Ibadan , Oyo State</a></li>
-          <li><a href="tel:08036210735">📞 08036210735</a></li>
-          <li><a href="mailto:info@intmglobal.org">✉️ info@intmglobal.org</a></li>
+          <li><a href="https://www.google.com/maps?q={{ (content.contact_address if content.contact_address else 'Plot 6, Block B, Akinyode Family Layout, Unity Estate Off Akala Expressway, Zionist Estate, New Garage, Orita Challenge, Ibadan , Oyo State') | urlencode }}" target="_blank" rel="noopener">📍 {{ content.contact_address if content.contact_address else 'Plot 6, Block B, Akinyode Family Layout, Unity Estate Off Akala Expressway, Zionist Estate, New Garage, Orita Challenge, Ibadan , Oyo State' }}</a></li>
+          <li><a href="tel:{{ content.contact_phone if content.contact_phone else '08036210735' }}">📞 {{ content.contact_phone if content.contact_phone else '08036210735' }}</a></li>
+          <li><a href="mailto:{{ content.contact_email if content.contact_email else 'info@intmglobal.org' }}">✉️ {{ content.contact_email if content.contact_email else 'info@intmglobal.org' }}</a></li>
           <li><a href="https://www.intmglobal.org" target="_blank" rel="noopener">🌐 www.intmglobal.org</a></li>
         </ul>
       </div>
