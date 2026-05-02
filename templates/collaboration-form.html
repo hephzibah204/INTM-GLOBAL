@@ -100,7 +100,7 @@
         <p class="section-intro">This form opens your email app with a pre-filled partnership request to INTM Global.</p>
       </div>
       <div class="form-card reveal">
-        <form id="collaborationForm">
+        <form id="collaborationForm" onsubmit="submitCollab(event)">
           <div class="form-group">
             <label for="collab-org">Organisation / Institution</label>
             <input type="text" id="collab-org" required placeholder="e.g. ABC Health Foundation">
@@ -115,7 +115,7 @@
           </div>
           <div class="form-group">
             <label for="collab-phone">Phone Number</label>
-            <input type="tel" id="collab-phone" required placeholder="e.g. +234...">
+            <input type="tel" id="collab-phone" placeholder="e.g. +234...">
           </div>
           <div class="form-group">
             <label for="collab-website">Website (optional)</label>
@@ -127,16 +127,17 @@
               <option value="" disabled selected>Select an option</option>
               <option value="Training Partnership">Training Partnership</option>
               <option value="Research Collaboration">Research Collaboration</option>
-              <option value="Certification & Standards">Certification & Standards</option>
+              <option value="Certification &amp; Standards">Certification &amp; Standards</option>
               <option value="Community Initiative">Community Initiative</option>
               <option value="Other">Other</option>
             </select>
           </div>
           <div class="form-group">
             <label for="collab-message">Message</label>
-            <input type="text" id="collab-message" required placeholder="Briefly describe the collaboration idea...">
+            <textarea id="collab-message" required placeholder="Briefly describe the collaboration idea..." rows="4" style="width:100%;padding:12px;background:var(--input-bg,#f7f7f9);border:1px solid var(--border,#e0e0e0);border-radius:8px;font-family:inherit;font-size:14px;resize:vertical;"></textarea>
           </div>
-          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px; border: none; cursor: pointer;">Submit Request</button>
+          <div id="collab-feedback" style="display:none;padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:14px;"></div>
+          <button type="submit" id="collab-submit" class="btn-primary" style="width: 100%; margin-top: 10px; border: none; cursor: pointer;">Submit Request</button>
         </form>
       </div>
     </section>
@@ -198,5 +199,41 @@
   </footer>
 
   <script src="./assets/site.js" defer></script>
+  <script>
+  async function submitCollab(e) {
+    e.preventDefault();
+    const btn = document.getElementById('collab-submit');
+    const fb  = document.getElementById('collab-feedback');
+    btn.textContent = 'Submitting…'; btn.disabled = true;
+    try {
+      const res = await fetch('/api/submit/collaboration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organisation:  document.getElementById('collab-org').value,
+          contact_name:  document.getElementById('collab-name').value,
+          email:         document.getElementById('collab-email').value,
+          phone:         document.getElementById('collab-phone').value,
+          website:       document.getElementById('collab-website').value,
+          collab_type:   document.getElementById('collab-type').value,
+          message:       document.getElementById('collab-message').value
+        })
+      });
+      const d = await res.json();
+      if (res.ok) {
+        fb.style.cssText = 'display:block;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;';
+        fb.textContent = '✓ Request received! Our team will follow up shortly.';
+        document.getElementById('collaborationForm').reset();
+      } else {
+        throw new Error(d.error || 'Submission failed');
+      }
+    } catch(err) {
+      fb.style.cssText = 'display:block;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;';
+      fb.textContent = '✕ ' + err.message;
+    } finally {
+      btn.textContent = 'Submit Request'; btn.disabled = false;
+    }
+  }
+  </script>
 </body>
 </html>

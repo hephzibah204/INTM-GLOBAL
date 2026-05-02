@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTM Global | About Us</title>
-  <meta name="description" content="Learn about INTM Global—our mission, approach, and commitment to evidence-based nutritional therapy education, research, and professional development.">
-  <meta name="keywords" content="about INTM, nutritional therapy institute, mission, evidence-based nutrition">
-  <meta property="og:title" content="INTM Global | About Us">
-  <meta property="og:description" content="Mission-driven education, research, and community impact in nutritional therapy.">
+  <title>INTM Global | Contact</title>
+  <meta name="description" content="Contact INTM Global for course enquiries, membership support, research requests, and general information.">
+  <meta name="keywords" content="contact INTM, nutrition institute contact, membership support, course enquiries">
+  <meta property="og:title" content="INTM Global | Contact">
+  <meta property="og:description" content="Get in touch with INTM Global for enquiries and support.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="./Images/logo/intmgloballogo.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://intmglobal.org/about.html">
+  <link rel="canonical" href="https://intmglobal.org/contact.html">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
@@ -50,13 +50,13 @@
         <details open>
           <summary>Institute <span class="caret">▾</span></summary>
           <div class="dropdown-menu">
-            <a href="./about.html" aria-current="page">About Us</a>
+            <a href="./about.html">About Us</a>
             <a href="./team.html">Our Team</a>
             <a href="./accreditation.html">Accreditation</a>
             <a href="./reports.html">Annual Reports</a>
             <a href="./careers.html">Careers</a>
             <a href="./verify.html">Verify Credentials</a>
-            <a href="./contact.html">Contact</a>
+            <a href="./contact.html" aria-current="page">Contact</a>
           </div>
         </details>
       </li>
@@ -89,18 +89,41 @@
 
   <main>
     <div class="page-hero">
-      <h1>About <em>INTM Global</em></h1>
-      <p>INTM Global exists to empower nutritionists, dietitians, health coaches, and allied health professionals with world-class training, cutting-edge research, and a thriving professional community.</p>
+      <h1>Contact <em>INTM Global</em></h1>
+      <p>Send an enquiry and our team will respond. For faster routing, include the topic and a short message.</p>
     </div>
 
-    <section>
-      <div class="projects-intro reveal" style="margin-bottom: 0;">
-        <div>
-          <div class="section-label">Mission</div>
-          <h2>Bridging <em>Nutrition Science</em> with Real-World Practice</h2>
-          <p>We focus on practical, evidence-based education and professional standards that translate into measurable improvements in individual and population health.</p>
-          <p style="margin-top: 12px;">For partnership, research, or training enquiries, email <a href="mailto:direct@intmglobal.org">direct@intmglobal.org</a>.</p>
-        </div>
+    <section id="contact">
+      <div class="team-header reveal">
+        <div class="section-label">Contact</div>
+        <h2>Send a <em>Message</em></h2>
+        <p class="section-intro">This form opens your email app with a pre-filled message to INTM Global.</p>
+      </div>
+      <div class="form-card reveal">
+        <form id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-group">
+            <label for="contact-name">Full Name</label>
+            <input type="text" id="contact-name" required placeholder="e.g. Jane Doe">
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" required placeholder="e.g. jane@example.com">
+          </div>
+          <div class="form-group">
+            <label for="contact-phone">Phone Number</label>
+            <input type="tel" id="contact-phone" placeholder="e.g. +234...">
+          </div>
+          <div class="form-group">
+            <label for="contact-subject">Subject</label>
+            <input type="text" id="contact-subject" required placeholder="e.g. Course enquiry">
+          </div>
+          <div class="form-group">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" required placeholder="Write a short message..." rows="4" style="width:100%;padding:12px;background:var(--input-bg,#f7f7f9);border:1px solid var(--border,#e0e0e0);border-radius:8px;font-family:inherit;font-size:14px;resize:vertical;"></textarea>
+          </div>
+          <div id="contact-feedback" style="display:none;padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:14px;"></div>
+          <button type="submit" id="contact-submit" class="btn-primary" style="width: 100%; margin-top: 10px; border: none; cursor: pointer;">Send Message</button>
+        </form>
       </div>
     </section>
   </main>
@@ -120,11 +143,12 @@
       <div class="footer-col">
         <h4>Institute</h4>
         <ul>
-          <li><a href="./about.html" aria-current="page">About INTM</a></li>
+          <li><a href="./about.html">About Us</a></li>
           <li><a href="./team.html">Our Team</a></li>
           <li><a href="./accreditation.html">Accreditation</a></li>
           <li><a href="./reports.html">Annual Reports</a></li>
           <li><a href="./careers.html">Careers</a></li>
+          <li><a href="./contact.html" aria-current="page">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -160,5 +184,39 @@
   </footer>
 
   <script src="./assets/site.js" defer></script>
+  <script>
+  async function submitContact(e) {
+    e.preventDefault();
+    const btn = document.getElementById('contact-submit');
+    const fb  = document.getElementById('contact-feedback');
+    btn.textContent = 'Sending…'; btn.disabled = true;
+    try {
+      const res = await fetch('/api/submit/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:    document.getElementById('contact-name').value,
+          email:   document.getElementById('contact-email').value,
+          phone:   document.getElementById('contact-phone').value,
+          subject: document.getElementById('contact-subject').value,
+          message: document.getElementById('contact-message').value
+        })
+      });
+      const d = await res.json();
+      if (res.ok) {
+        fb.style.cssText = 'display:block;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;';
+        fb.textContent = '✓ Message sent! We will be in touch shortly.';
+        document.getElementById('contactForm').reset();
+      } else {
+        throw new Error(d.error || 'Submission failed');
+      }
+    } catch(err) {
+      fb.style.cssText = 'display:block;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;';
+      fb.textContent = '✕ ' + err.message;
+    } finally {
+      btn.textContent = 'Send Message'; btn.disabled = false;
+    }
+  }
+  </script>
 </body>
 </html>

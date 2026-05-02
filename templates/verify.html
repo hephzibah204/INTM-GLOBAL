@@ -861,7 +861,7 @@
     document.getElementById('verify-result').style.display = 'none';
   }
 
-  function verifyCredential(e, type) {
+  async function verifyCredential(e, type) {
     e.preventDefault();
     const resultBox = document.getElementById('verify-result');
     resultBox.style.display = 'block';
@@ -870,11 +870,33 @@
     resultBox.style.color = 'var(--mid)';
     resultBox.innerHTML = 'Checking database...';
     
-    setTimeout(() => {
+    const isCert = type === 'Certificate';
+    const name = document.getElementById(isCert ? 'cert-name' : 'mem-name').value.trim();
+    const credId = document.getElementById(isCert ? 'cert-id' : 'mem-id').value.trim();
+
+    try {
+      const res = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, credential_id: credId, type: type })
+      });
+      const data = await res.json();
+      
+      if (data.valid) {
+        resultBox.style.background = 'rgba(34,197,94,0.1)';
+        resultBox.style.color = '#15803d'; // Green
+        resultBox.innerHTML = '✅ <b>Valid ' + type + '</b><br>' + data.message;
+      } else {
+        resultBox.style.background = 'rgba(239,68,68,0.1)';
+        resultBox.style.color = '#b91c1c'; // Red
+        resultBox.innerHTML = '❌ <b>Verification Failed</b><br>' + data.message + 
+          '<br><br><span style="font-size:12px;color:var(--mid);">If you believe this is an error, please email direct@intmglobal.org</span>';
+      }
+    } catch(err) {
       resultBox.style.background = 'rgba(181,135,74,0.1)';
       resultBox.style.color = '#8a5f1e';
-      resultBox.innerHTML = `⚠️ Our digital verification portal is currently undergoing maintenance. <br><br>While we connect our Supabase database, please email <b>direct@intmglobal.org</b> with your ${type} ID to verify its authenticity.`;
-    }, 1500);
+      resultBox.innerHTML = `⚠️ Service Unavailable <br><br>We could not reach the verification server. Please try again later or email <b>direct@intmglobal.org</b> with your ${type} ID.`;
+    }
   }
 </script>
 <!-- FOOTER -->

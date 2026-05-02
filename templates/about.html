@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTM Global | Membership</title>
-  <meta name="description" content="Join INTM Global membership to access professional recognition, CPD resources, exclusive training benefits, and a thriving community of practitioners.">
-  <meta name="keywords" content="INTM membership, nutrition professional body, CPD, professional recognition, nutritional therapy community">
-  <meta property="og:title" content="INTM Global | Membership">
-  <meta property="og:description" content="Membership that supports your practice with recognition, resources, and a professional network across Africa and beyond.">
+  <title>INTM Global | About Us</title>
+  <meta name="description" content="Learn about INTM Global—our mission, approach, and commitment to evidence-based nutritional therapy education, research, and professional development.">
+  <meta name="keywords" content="about INTM, nutritional therapy institute, mission, evidence-based nutrition">
+  <meta property="og:title" content="INTM Global | About Us">
+  <meta property="og:description" content="Mission-driven education, research, and community impact in nutritional therapy.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="./Images/logo/intmgloballogo.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://intmglobal.org/membership.html">
+  <link rel="canonical" href="https://intmglobal.org/about.html">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
@@ -27,12 +27,12 @@
     <ul class="nav-links">
       <li><a href="./index.html">Home</a></li>
       <li class="nav-dropdown">
-        <details open>
+        <details>
           <summary>Programs <span class="caret">▾</span></summary>
           <div class="dropdown-menu">
             <a href="./courses.html">Courses</a>
             <a href="./workshops.html">Workshops</a>
-            <a href="./membership.html" aria-current="page">Membership</a>
+            <a href="./membership.html">Membership</a>
             <a href="./projects.html">Projects</a>
           </div>
         </details>
@@ -47,10 +47,10 @@
         </details>
       </li>
       <li class="nav-dropdown">
-        <details>
+        <details open>
           <summary>Institute <span class="caret">▾</span></summary>
           <div class="dropdown-menu">
-            <a href="./about.html">About Us</a>
+            <a href="./about.html" aria-current="page">About Us</a>
             <a href="./team.html">Our Team</a>
             <a href="./accreditation.html">Accreditation</a>
             <a href="./reports.html">Annual Reports</a>
@@ -89,98 +89,18 @@
 
   <main>
     <div class="page-hero">
-      <h1>Membership</h1>
-      <p>Professional recognition, resources, and a community built to support your growth and impact in nutritional therapy.</p>
+      <h1>About <em>INTM Global</em></h1>
+      <p>{{ content.about_intro if content.about_intro else 'INTM Global exists to empower nutritionists, dietitians, health coaches, and allied health professionals with world-class training, cutting-edge research, and a thriving professional community.' }}</p>
     </div>
 
-    <section id="membership">
-      <div class="membership-header reveal">
-        <div class="section-label">Membership</div>
-        <h2>Join a <em>Thriving Community</em></h2>
-        <p class="section-intro">INTM membership opens doors to exclusive resources, professional recognition, peer networks, and career advancement opportunities.</p>
-      </div>
-      <div class="membership-grid">
-        <div class="mem-card reveal">
-          <h3>Associate Member</h3>
-          <p style="font-size:14px;color:var(--soft);">Students &amp; newly qualified practitioners</p>
-          <div class="mem-price">₦15,000</div>
-          <div class="mem-period">per year</div>
-          <ul class="mem-features">
-            <li>Access to INTM digital library</li>
-            <li>Quarterly member newsletter</li>
-            <li>Discounted course fees (10%)</li>
-            <li>Online community forum access</li>
-            <li>Certificate of membership</li>
-          </ul>
-          <a href="./membership.html?tier=Associate#apply" class="mem-btn mem-btn-outline">Get Started</a>
+    <section>
+      <div class="projects-intro reveal" style="margin-bottom: 0;">
+        <div>
+          <div class="section-label">Mission</div>
+          <h2>Bridging <em>Nutrition Science</em> with Real-World Practice</h2>
+          <p>We focus on practical, evidence-based education and professional standards that translate into measurable improvements in individual and population health.</p>
+          <p style="margin-top: 12px;">For partnership, research, or training enquiries, email <a href="mailto:direct@intmglobal.org">direct@intmglobal.org</a>.</p>
         </div>
-        <div class="mem-card featured reveal">
-          <div class="mem-badge">Most Popular</div>
-          <h3>Full Member</h3>
-          <p style="font-size:14px;color:rgba(255,255,255,0.6);">Qualified nutritionists &amp; dietitians</p>
-          <div class="mem-price">₦35,000</div>
-          <div class="mem-period">per year</div>
-          <ul class="mem-features">
-            <li>All Associate benefits</li>
-            <li>Use of post-nominal MINTM</li>
-            <li>CPD accreditation tracker</li>
-            <li>Priority workshop registration</li>
-            <li>Discounted course fees (20%)</li>
-            <li>Peer mentoring programme</li>
-            <li>Professional indemnity support</li>
-          </ul>
-          <a href="./membership.html?tier=Full%20Member#apply" class="mem-btn mem-btn-solid">Join Now</a>
-        </div>
-        <div class="mem-card reveal">
-          <h3>Fellow</h3>
-          <p style="font-size:14px;color:var(--soft);">Senior practitioners &amp; academics</p>
-          <div class="mem-price">₦65,000</div>
-          <div class="mem-period">per year</div>
-          <ul class="mem-features">
-            <li>All Full Member benefits</li>
-            <li>Use of post-nominal FINTM</li>
-            <li>Research publication support</li>
-            <li>Seat on advisory committees</li>
-            <li>Free annual conference access</li>
-            <li>Co-branding opportunities</li>
-            <li>Leadership &amp; speaking invites</li>
-          </ul>
-          <a href="./membership.html?tier=Fellow#apply" class="mem-btn mem-btn-outline">Apply Now</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="apply">
-      <div class="team-header reveal">
-        <div class="section-label">Application</div>
-        <h2>Register Your <em>Interest</em></h2>
-        <p class="section-intro">Submit your details and we’ll share next steps for your selected membership tier.</p>
-      </div>
-      <div class="form-card reveal">
-        <form id="membershipForm">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required placeholder="Dr. Jane Doe">
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required placeholder="jane@example.com">
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" required placeholder="+234...">
-          </div>
-          <div class="form-group">
-            <label for="tier">Membership Tier</label>
-            <select id="tier" name="tier" required>
-              <option value="" disabled selected>Select a Tier</option>
-              <option value="Associate">Associate Member</option>
-              <option value="Full Member">Full Member</option>
-              <option value="Fellow">Fellow</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px; border: none; cursor: pointer;">Submit Application</button>
-        </form>
       </div>
     </section>
   </main>
@@ -200,7 +120,7 @@
       <div class="footer-col">
         <h4>Institute</h4>
         <ul>
-          <li><a href="./about.html">About INTM</a></li>
+          <li><a href="./about.html" aria-current="page">About INTM</a></li>
           <li><a href="./team.html">Our Team</a></li>
           <li><a href="./accreditation.html">Accreditation</a></li>
           <li><a href="./reports.html">Annual Reports</a></li>

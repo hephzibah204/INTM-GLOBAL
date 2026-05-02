@@ -3,19 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTM Global | Contact</title>
-  <meta name="description" content="Contact INTM Global for course enquiries, membership support, research requests, and general information.">
-  <meta name="keywords" content="contact INTM, nutrition institute contact, membership support, course enquiries">
-  <meta property="og:title" content="INTM Global | Contact">
-  <meta property="og:description" content="Get in touch with INTM Global for enquiries and support.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="./Images/logo/intmgloballogo.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://intmglobal.org/contact.html">
+  <title>{% block title %}INTM Global | Institute of Nutritional Therapy Management{% endblock %}</title>
+  {% block meta %}
+  <meta name="description" content="INTM Global advances evidence-based nutritional therapy through professional education, research, and community initiatives across Africa and beyond.">
+  {% endblock %}
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
+  {% block styles %}{% endblock %}
 </head>
 <body>
+  <!-- NAV -->
   <nav id="navbar">
     <a href="./index.html" class="nav-logo">
       <img src="./Images/logo/intmgloballogo.jpg" alt="INTM Logo" style="height: 52px; width: auto; object-fit: contain;">
@@ -47,7 +44,7 @@
         </details>
       </li>
       <li class="nav-dropdown">
-        <details open>
+        <details>
           <summary>Institute <span class="caret">▾</span></summary>
           <div class="dropdown-menu">
             <a href="./about.html">About Us</a>
@@ -56,7 +53,7 @@
             <a href="./reports.html">Annual Reports</a>
             <a href="./careers.html">Careers</a>
             <a href="./verify.html">Verify Credentials</a>
-            <a href="./contact.html" aria-current="page">Contact</a>
+            <a href="./contact.html">Contact</a>
           </div>
         </details>
       </li>
@@ -88,45 +85,10 @@
   </div>
 
   <main>
-    <div class="page-hero">
-      <h1>Contact <em>INTM Global</em></h1>
-      <p>Send an enquiry and our team will respond. For faster routing, include the topic and a short message.</p>
-    </div>
-
-    <section id="contact">
-      <div class="team-header reveal">
-        <div class="section-label">Contact</div>
-        <h2>Send a <em>Message</em></h2>
-        <p class="section-intro">This form opens your email app with a pre-filled message to INTM Global.</p>
-      </div>
-      <div class="form-card reveal">
-        <form id="contactForm">
-          <div class="form-group">
-            <label for="contact-name">Full Name</label>
-            <input type="text" id="contact-name" required placeholder="e.g. Jane Doe">
-          </div>
-          <div class="form-group">
-            <label for="contact-email">Email Address</label>
-            <input type="email" id="contact-email" required placeholder="e.g. jane@example.com">
-          </div>
-          <div class="form-group">
-            <label for="contact-phone">Phone Number</label>
-            <input type="tel" id="contact-phone" required placeholder="e.g. +234...">
-          </div>
-          <div class="form-group">
-            <label for="contact-subject">Subject</label>
-            <input type="text" id="contact-subject" required placeholder="e.g. Course enquiry">
-          </div>
-          <div class="form-group">
-            <label for="contact-message">Message</label>
-            <input type="text" id="contact-message" required placeholder="Write a short message...">
-          </div>
-          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px; border: none; cursor: pointer;">Send Message</button>
-        </form>
-      </div>
-    </section>
+    {% block content %}{% endblock %}
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
@@ -142,12 +104,11 @@
       <div class="footer-col">
         <h4>Institute</h4>
         <ul>
-          <li><a href="./about.html">About Us</a></li>
+          <li><a href="./about.html">About INTM</a></li>
           <li><a href="./team.html">Our Team</a></li>
           <li><a href="./accreditation.html">Accreditation</a></li>
           <li><a href="./reports.html">Annual Reports</a></li>
           <li><a href="./careers.html">Careers</a></li>
-          <li><a href="./contact.html" aria-current="page">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -163,10 +124,10 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li><a href="https://www.google.com/maps?q=Victoria+Island,+Lagos" target="_blank" rel="noopener">📍 14 Nutrition Way, Victoria Island, Lagos</a></li>
-          <li><a href="tel:+2340800INTM001">📞 +234 (0) 800 INTM 001</a></li>
-          <li><a href="mailto:info@intm.org.ng">✉️ info@intm.org.ng</a></li>
-          <li><a href="https://www.intm.org.ng" target="_blank" rel="noopener">🌐 www.intm.org.ng</a></li>
+          <li><a href="https://www.google.com/maps?q=Plot+6,+Block+B,+Akinyode+Family+Layout,+Unity+Estate,+Ibadan" target="_blank" rel="noopener">📍 Plot 6, Block B, Akinyode Family Layout, Unity Estate Off Akala Expressway, Zionist Estate, New Garage, Orita Challenge, Ibadan , Oyo State</a></li>
+          <li><a href="tel:08036210735">📞 08036210735</a></li>
+          <li><a href="mailto:info@intmglobal.org">✉️ info@intmglobal.org</a></li>
+          <li><a href="https://www.intmglobal.org" target="_blank" rel="noopener">🌐 www.intmglobal.org</a></li>
         </ul>
       </div>
     </div>
@@ -183,5 +144,6 @@
   </footer>
 
   <script src="./assets/site.js" defer></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

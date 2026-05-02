@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTM Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f1a;
+      --surface: #141728;
+      --surface2: #1c2038;
+      --border: rgba(255,255,255,0.08);
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #e8eaf0;
+      --soft: #8b90a8;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Login ── */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 60% 40%, rgba(79,142,247,0.15), transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(124,92,191,0.12), transparent 55%),
+                  var(--bg);
+    }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    .login-logo { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .login-card h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .login-card p { color: var(--soft); font-size: 14px; margin-bottom: 32px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: 12px; font-weight: 600; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .field input {
+      width: 100%; padding: 12px 16px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+      font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .btn-login {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 8px; color: #fff; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: opacity .2s; margin-top: 8px;
+    }
+    .btn-login:hover { opacity: .9; }
+    #login-error { color: var(--red); font-size: 13px; margin-top: 12px; display: none; text-align: center; }
+
+    /* ── App Shell ── */
+    #app { display: none; min-height: 100vh; }
+    .sidebar {
+      width: 240px; background: var(--surface); border-right: 1px solid var(--border);
+      position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 24px 20px; border-bottom: 1px solid var(--border);
+      font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase;
+    }
+    .sidebar-logo span { display: block; font-size: 16px; color: var(--text); letter-spacing: 0; margin-top: 2px; }
+    .nav-section { padding: 16px 12px 8px; font-size: 10px; color: var(--soft); text-transform: uppercase; letter-spacing: 1.5px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+      border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500;
+      color: var(--soft); transition: all .2s; margin: 2px 8px; position: relative;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: rgba(79,142,247,0.15); color: var(--accent); }
+    .nav-item .badge {
+      margin-left: auto; background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 20px; min-width: 20px; text-align: center;
+    }
+    .nav-item .badge.hidden { display: none; }
+    .sidebar-footer { margin-top: auto; padding: 16px; border-top: 1px solid var(--border); }
+    .btn-logout {
+      width: 100%; padding: 10px; background: transparent; border: 1px solid var(--border);
+      border-radius: 8px; color: var(--soft); font-size: 13px; cursor: pointer; transition: all .2s;
+    }
+    .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── Main ── */
+    .main { margin-left: 240px; padding: 32px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .topbar h2 { font-size: 22px; font-weight: 700; }
+    .topbar-right { display: flex; gap: 12px; align-items: center; }
+    .search-box {
+      padding: 9px 16px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-size: 13px; width: 220px; outline: none;
+    }
+    .search-box:focus { border-color: var(--accent); }
+    .filter-select {
+      padding: 9px 12px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-size: 13px; outline: none; cursor: pointer;
+    }
+    .btn-refresh {
+      padding: 9px 18px; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-size: 13px; cursor: pointer; transition: all .2s;
+    }
+    .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Stat Cards ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px 20px; position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--c1), var(--c2));
+    }
+    .stat-card.blue  { --c1: #4f8ef7; --c2: #7c5cbf; }
+    .stat-card.green { --c1: #22c55e; --c2: #16a34a; }
+    .stat-card.amber { --c1: #f59e0b; --c2: #d97706; }
+    .stat-card.purple{ --c1: #a855f7; --c2: #7c3aed; }
+    .stat-label { font-size: 11px; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 700; }
+    .stat-sub { font-size: 12px; color: var(--soft); margin-top: 4px; }
+    .stat-sub span { color: var(--red); font-weight: 600; }
+
+    /* ── Table ── */
+    .table-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+    .table-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .table-count { font-size: 12px; color: var(--soft); background: var(--surface2); padding: 3px 10px; border-radius: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600;
+      color: var(--soft); text-transform: uppercase; letter-spacing: 1px;
+      background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    td { padding: 13px 16px; font-size: 13px; vertical-align: middle; }
+    .td-name { font-weight: 600; }
+    .td-email { color: var(--soft); }
+    .td-date { color: var(--soft); font-size: 12px; white-space: nowrap; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .status-new      { background: rgba(79,142,247,0.15); color: var(--accent); }
+    .status-read     { background: rgba(34,197,94,0.12);  color: var(--green);  }
+    .status-archived { background: rgba(139,144,168,0.12); color: var(--soft);  }
+    .actions { display: flex; gap: 6px; }
+    .action-btn {
+      padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--border); background: transparent; transition: all .2s; color: var(--soft);
+    }
+    .action-btn:hover.mark-read     { border-color: var(--green); color: var(--green); }
+    .action-btn:hover.mark-archive  { border-color: var(--amber); color: var(--amber); }
+    .action-btn:hover.mark-delete   { border-color: var(--red);   color: var(--red);   }
+    .tag { display: inline-block; padding: 3px 9px; background: rgba(124,92,191,0.15); color: #b08cf7; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .empty-state { padding: 60px; text-align: center; color: var(--soft); }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px;
+      font-size: 13px; font-weight: 500; z-index: 999;
+      transform: translateY(80px); opacity: 0; transition: all .3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--green); color: var(--green); }
+    .toast.error   { border-color: var(--red);   color: var(--red);   }
+
+    /* ── Expandable detail row ── */
+    .detail-row td { background: var(--surface2); padding: 16px 24px; }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .detail-item label { font-size: 10px; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+    .detail-item span  { font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">INTM Global</div>
+    <h1>Admin Panel</h1>
+    <p>Sign in to manage form submissions.</p>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="login-btn" onclick="doLogin()">Sign In</button>
+    <div id="login-error">Invalid username or password.</div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">INTM Global<span>Admin Dashboard</span></div>
+    <div class="nav-section">Navigation</div>
+    <div class="nav-item active" id="nav-all" onclick="setTab('all')">
+      📊 &nbsp;All Submissions <span class="badge hidden" id="badge-all"></span>
+    </div>
+    <div class="nav-item" id="nav-contact" onclick="setTab('contact')">
+      ✉️ &nbsp;Contact <span class="badge hidden" id="badge-contact"></span>
+    </div>
+    <div class="nav-item" id="nav-membership" onclick="setTab('membership')">
+      🎓 &nbsp;Membership <span class="badge hidden" id="badge-membership"></span>
+    </div>
+    <div class="nav-item" id="nav-collaboration" onclick="setTab('collaboration')">
+      🤝 &nbsp;Collaboration <span class="badge hidden" id="badge-collaboration"></span>
+    </div>
+    <div class="nav-item" id="nav-credentials" onclick="setTab('credentials')">
+      🛡️ &nbsp;Credentials <span class="badge hidden" id="badge-credentials"></span>
+    </div>
+    <div class="nav-section">Management</div>
+    <div class="nav-item" id="nav-content" onclick="setTab('content')">
+      📝 &nbsp;Content Editor
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <h2 id="page-title">All Submissions</h2>
+      <div class="topbar-right">
+        <button id="add-cred-btn" onclick="showAddCredModal()" class="btn-login" style="display:none; margin:0; padding: 9px 18px; width: auto; font-size: 13px;">+ Add Credential</button>
+        <button id="save-content-btn" onclick="saveContent()" class="btn-login" style="display:none; margin:0; padding: 9px 18px; width: auto; font-size: 13px; background: var(--green);">Save Changes</button>
+        <input class="search-box" id="search-input" placeholder="Search…" oninput="debouncedLoad()">
+        <select class="filter-select" id="status-filter" onchange="loadData()">
+          <option value="">All Statuses</option>
+          <option value="new">New</option>
+          <option value="read">Read</option>
+          <option value="archived">Archived</option>
+        </select>
+        <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-label">Total Submissions</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-sub">All form types</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Contact</div>
+        <div class="stat-value" id="stat-contact">—</div>
+        <div class="stat-sub"><span id="stat-contact-new">—</span> new</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">Membership</div>
+        <div class="stat-value" id="stat-member">—</div>
+        <div class="stat-sub"><span id="stat-member-new">—</span> new</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">Collaboration</div>
+        <div class="stat-value" id="stat-collab">—</div>
+        <div class="stat-sub"><span id="stat-collab-new">—</span> new</div>
+      </div>
+    </div>
+
+    <!-- Tables -->
+    <div id="tables-container"></div>
+  </div>
+</div>
+
+<!-- Modal for Adding Credential -->
+<div id="add-cred-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:999; align-items:center; justify-content:center;">
+  <div class="login-card" style="width: 400px; padding: 32px;">
+    <h2 style="font-size:20px; margin-bottom: 24px;">Add Valid Credential</h2>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="add-cred-name" placeholder="e.g. Jane Doe">
+    </div>
+    <div class="field">
+      <label>Credential ID</label>
+      <input type="text" id="add-cred-id" placeholder="e.g. INTM-CERT-123">
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <select id="add-cred-type" style="width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; outline: none;">
+        <option value="Certificate">Certificate</option>
+        <option value="Membership">Membership</option>
+      </select>
+    </div>
+    <div style="display:flex; gap:12px; margin-top:24px;">
+      <button class="action-btn" style="flex:1; padding:12px; font-size:14px;" onclick="document.getElementById('add-cred-modal').style.display='none'">Cancel</button>
+      <button class="btn-login" style="flex:1; margin:0;" onclick="submitAddCred()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = '';   // same origin; Flask serves this file
+  let currentTab = 'all';
+  let currentData = {};
+  let searchTimer;
+
+  /* ── Auth ── */
+  async function doLogin() {
+    const user = document.getElementById('login-user').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    const btn  = document.getElementById('login-btn');
+    btn.textContent = 'Signing in…';
+    const res = await fetch(`${API}/api/login`, {
+      method: 'POST', credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username: user, password: pass })
+    });
+    btn.textContent = 'Sign In';
+    if (res.ok) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadStats();
+      loadData();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  document.getElementById('login-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function doLogout() {
+    await fetch(`${API}/api/logout`, { method: 'POST', credentials: 'include' });
+    location.reload();
+  }
+
+  async function checkSession() {
+    const res = await fetch(`${API}/api/me`, { credentials: 'include' });
+    const d = await res.json();
+    if (d.logged_in) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadStats();
+      loadData();
+    }
+  }
+
+  /* ── Tab navigation ── */
+  function setTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('nav-' + tab).classList.add('active');
+    const titles = { 
+      all:'All Submissions', 
+      contact:'Contact Messages', 
+      membership:'Membership Applications', 
+      collaboration:'Collaboration Requests', 
+      credentials:'Valid Credentials',
+      content:'Site Content Editor'
+    };
+    document.getElementById('page-title').textContent = titles[tab];
+    
+    document.getElementById('add-cred-btn').style.display = tab === 'credentials' ? 'block' : 'none';
+    document.getElementById('save-content-btn').style.display = tab === 'content' ? 'block' : 'none';
+    document.getElementById('status-filter').style.display = (tab === 'credentials' || tab === 'content') ? 'none' : 'block';
+    document.getElementById('search-input').style.display = tab === 'content' ? 'none' : 'block';
+
+    renderTables();
+  }
+
+  /* ── Stats ── */
+  async function loadStats() {
+    const res = await fetch(`${API}/api/admin/stats`, { credentials: 'include' });
+    if (!res.ok) return;
+    const s = await res.json();
+    document.getElementById('stat-total').textContent   = s.contact.total + s.membership.total + s.collaboration.total;
+    document.getElementById('stat-contact').textContent = s.contact.total;
+    document.getElementById('stat-member').textContent  = s.membership.total;
+    document.getElementById('stat-collab').textContent  = s.collaboration.total;
+    document.getElementById('stat-contact-new').textContent = s.contact.new;
+    document.getElementById('stat-member-new').textContent  = s.membership.new;
+    document.getElementById('stat-collab-new').textContent  = s.collaboration.new;
+    setBadge('all',          s.all_new);
+    setBadge('contact',      s.contact.new);
+    setBadge('membership',   s.membership.new);
+    setBadge('collaboration',s.collaboration.new);
+  }
+
+  function setBadge(id, count) {
+    const el = document.getElementById('badge-' + id);
+    if (count > 0) { el.textContent = count; el.classList.remove('hidden'); }
+    else { el.classList.add('hidden'); }
+  }
+
+  /* ── Data ── */
+  async function loadData() {
+    const search = document.getElementById('search-input').value.trim();
+    const status = document.getElementById('status-filter').value;
+    const qs = new URLSearchParams();
+    if (search) qs.set('search', search);
+    if (status) qs.set('status', status);
+    const res = await fetch(`${API}/api/admin/submissions?${qs}`, { credentials: 'include' });
+    if (!res.ok) return;
+    currentData = await res.json();
+
+    // Also fetch site content
+    const cRes = await fetch(`${API}/api/admin/content`, { credentials: 'include' });
+    if (cRes.ok) {
+      const cData = await cRes.json();
+      currentData.site_content = cData.content;
+    }
+
+    renderTables();
+    loadStats();
+  }
+
+  function debouncedLoad() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(loadData, 350);
+  }
+
+  /* ── Render ── */
+  function renderTables() {
+    const c  = document.getElementById('tables-container');
+    
+    if (currentTab === 'content') {
+      c.innerHTML = renderContentEditor();
+      return;
+    }
+
+    const tabs = currentTab === 'all'
+      ? ['contact','membership','collaboration']
+      : [currentTab];
+    c.innerHTML = tabs.map(t => renderTable(t)).join('<br>');
+  }
+
+  function fmt(dt) {
+    if (!dt) return '—';
+    return new Date(dt + 'Z').toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function statusBadge(s) {
+    if (s === 'Active') return `<span class="status-badge" style="background: rgba(34,197,94,0.12); color: var(--green);">Active</span>`;
+    if (s === 'Revoked') return `<span class="status-badge" style="background: rgba(239,68,68,0.12); color: var(--red);">Revoked</span>`;
+    return `<span class="status-badge status-${s}">${s}</span>`;
+  }
+
+  function renderTable(type) {
+    const rows  = currentData[type] || [];
+    const titles = { contact:'✉️ Contact Messages', membership:'🎓 Membership Applications', collaboration:'🤝 Collaboration Requests', credentials:'🛡️ Valid Credentials' };
+    let tbody = '';
+
+    if (rows.length === 0) {
+      tbody = `<tr><td colspan="8"><div class="empty-state"><div class="icon">${type==='credentials'?'🛡️':'📭'}</div>No records yet</div></td></tr>`;
+    } else {
+      rows.forEach(r => {
+        if (type === 'credentials') {
+          tbody += `
+            <tr>
+              <td class="td-name">${escHtml(r.name)}</td>
+              <td class="td-email">${escHtml(r.credential_id)}</td>
+              <td><span class="tag">${r.type}</span></td>
+              <td>${statusBadge(r.status)}</td>
+              <td class="td-date">${fmt(r.created_at)}</td>
+              <td>
+                <div class="actions">
+                  ${r.status === 'Active' 
+                    ? `<button class="action-btn mark-archive" onclick="setStatusCred(${r.id},'Revoked')">Revoke</button>`
+                    : `<button class="action-btn mark-read" onclick="setStatusCred(${r.id},'Active')">Re-activate</button>`}
+                  <button class="action-btn mark-delete" onclick="delCred(${r.id})">✕ Delete</button>
+                </div>
+              </td>
+            </tr>`;
+          return;
+        }
+
+        const name    = type === 'collaboration' ? r.organisation : r.name;
+        const subtext = type === 'contact' ? r.subject : (type === 'membership' ? `<span class="tag">${r.tier||'—'}</span>` : `<span class="tag">${r.collab_type||'—'}</span>`);
+        tbody += `
+          <tr onclick="toggleDetail('${type}-${r.id}')" style="cursor:pointer">
+            <td class="td-name">${escHtml(name||'—')}</td>
+            <td class="td-email">${escHtml(r.email||'—')}</td>
+            <td>${subtext}</td>
+            <td>${statusBadge(r.status)}</td>
+            <td class="td-date">${fmt(r.created_at)}</td>
+            <td onclick="event.stopPropagation()">
+              <div class="actions">
+                <button class="action-btn mark-read"    onclick="setStatus('${type}',${r.id},'read')">✓ Read</button>
+                <button class="action-btn mark-archive" onclick="setStatus('${type}',${r.id},'archived')">⊘ Archive</button>
+                <button class="action-btn mark-delete"  onclick="del('${type}',${r.id})">✕</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="detail-row" id="${type}-${r.id}" style="display:none">
+            <td colspan="6">${renderDetail(type, r)}</td>
+          </tr>`;
+      });
+    }
+
+    return `
+      <div class="table-card" style="margin-bottom:24px">
+        <div class="table-header">
+          <div class="table-title">${titles[type]} <span class="table-count">${rows.length}</span></div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>${type==='credentials'?'Name':'Name / Org'}</th><th>${type==='credentials'?'Credential ID':'Email'}</th><th>${type==='credentials'?'Type':'Details'}</th>
+            <th>Status</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody>${tbody}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderDetail(type, r) {
+    let items = [];
+    if (type === 'contact') {
+      items = [
+        { label:'Full Name',    val: r.name },
+        { label:'Email',        val: r.email },
+        { label:'Phone',        val: r.phone },
+        { label:'Subject',      val: r.subject },
+        { label:'Message',      val: r.message },
+        { label:'Submitted',    val: fmt(r.created_at) },
+      ];
+    } else if (type === 'membership') {
+      items = [
+        { label:'Full Name',   val: r.name },
+        { label:'Email',       val: r.email },
+        { label:'Phone',       val: r.phone },
+        { label:'Tier',        val: r.tier },
+        { label:'Submitted',   val: fmt(r.created_at) },
+      ];
+    } else {
+      items = [
+        { label:'Organisation', val: r.organisation },
+        { label:'Contact',      val: r.contact_name },
+        { label:'Email',        val: r.email },
+        { label:'Phone',        val: r.phone },
+        { label:'Website',      val: r.website },
+        { label:'Type',         val: r.collab_type },
+        { label:'Message',      val: r.message },
+        { label:'Submitted',    val: fmt(r.created_at) },
+      ];
+    }
+    return `<div class="detail-grid">${items.map(i =>
+      `<div class="detail-item"><label>${i.label}</label><span>${escHtml(i.val||'—')}</span></div>`
+    ).join('')}</div>`;
+  }
+
+  function toggleDetail(id) {
+    const row = document.getElementById(id);
+    if (!row) return;
+    row.style.display = row.style.display === 'none' ? '' : 'none';
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── Actions ── */
+  async function setStatus(type, id, status) {
+    const res = await fetch(`${API}/api/admin/submissions/${type}/${id}/status`, {
+      method: 'PATCH', credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ status })
+    });
+    if (res.ok) { showToast(`Marked as ${status}`, 'success'); loadData(); }
+    else showToast('Update failed', 'error');
+  }
+
+  async function del(type, id) {
+    if (!confirm('Delete this submission? This cannot be undone.')) return;
+    const res = await fetch(`${API}/api/admin/submissions/${type}/${id}`, {
+      method: 'DELETE', credentials: 'include'
+    });
+    if (res.ok) { showToast('Submission deleted', 'success'); loadData(); }
+    else showToast('Delete failed', 'error');
+  }
+
+  /* ── Credential Actions ── */
+  function showAddCredModal() {
+    document.getElementById('add-cred-modal').style.display = 'flex';
+  }
+
+  async function submitAddCred() {
+    const name = document.getElementById('add-cred-name').value.trim();
+    const id = document.getElementById('add-cred-id').value.trim();
+    const type = document.getElementById('add-cred-type').value;
+    if (!name || !id) return showToast('Please fill all fields', 'error');
+
+    const res = await fetch(`${API}/api/admin/credentials`, {
+      method: 'POST', credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name, credential_id: id, type })
+    });
+    if (res.ok) { 
+      showToast('Credential added', 'success'); 
+      document.getElementById('add-cred-modal').style.display = 'none';
+      document.getElementById('add-cred-name').value = '';
+      document.getElementById('add-cred-id').value = '';
+      loadData(); 
+    } else {
+      const d = await res.json();
+      showToast(d.error || 'Failed to add', 'error');
+    }
+  }
+
+  async function setStatusCred(id, status) {
+    // Currently set status endpoint isn't mapped for credentials in server.py, 
+    // but we can either add it or just re-add it. Let's make an update endpoint for status.
+    // Wait, let's just create a generic PATCH in server.py for credentials if needed,
+    // or just leave Revoke out if not implemented backend-side yet.
+    // I will implement a quick PATCH endpoint in the backend for credentials.
+    const res = await fetch(`${API}/api/admin/credentials/${id}/status`, {
+      method: 'PATCH', credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ status })
+    });
+    if (res.ok) { showToast(`Credential marked ${status}`, 'success'); loadData(); }
+    else showToast('Update failed', 'error');
+  }
+
+  async function delCred(id) {
+    if (!confirm('Delete this credential?')) return;
+    const res = await fetch(`${API}/api/admin/credentials/${id}`, {
+      method: 'DELETE', credentials: 'include'
+    });
+    if (res.ok) { showToast('Credential deleted', 'success'); loadData(); }
+    else showToast('Delete failed', 'error');
+  }
+
+  /* ── Content Editor Actions ── */
+  function renderContentEditor() {
+    const content = currentData.site_content || [];
+    if (content.length === 0) return '<div class="empty-state">No editable content found.</div>';
+
+    let html = `
+      <div class="table-card" style="padding: 24px;">
+        <p style="margin-bottom: 24px; color: var(--soft); font-size: 14px;">Modify the text below and click "Save Changes" to update the live website.</p>
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+    `;
+
+    // Group by page
+    const pages = {};
+    content.forEach(item => {
+      if (!pages[item.page_id]) pages[item.page_id] = [];
+      pages[item.page_id].push(item);
+    });
+
+    for (const page in pages) {
+      html += `<div style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+        <h3 style="text-transform: uppercase; font-size: 12px; color: var(--accent); margin-bottom: 16px;">Page: ${page}</h3>`;
+      
+      pages[page].forEach(item => {
+        html += `
+          <div class="field" style="margin-bottom: 20px;">
+            <label style="color: var(--text);">${item.section_id.replace(/_/g, ' ')} ${item.type === 'html' ? '(HTML Supported)' : ''}</label>
+            ${item.content.length > 60 || item.type === 'html'
+              ? `<textarea data-id="${item.id}" style="width: 100%; min-height: 100px; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 14px; outline: none;">${item.content}</textarea>`
+              : `<input type="text" data-id="${item.id}" value="${item.content.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 14px; outline: none;">`
+            }
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div></div>`;
+    return html;
+  }
+
+  async function saveContent() {
+    const inputs = document.querySelectorAll('#tables-container [data-id]');
+    const updates = [];
+    inputs.forEach(input => {
+      updates.push({
+        id: parseInt(input.getAttribute('data-id')),
+        content: input.value
+      });
+    });
+
+    const btn = document.getElementById('save-content-btn');
+    const oldText = btn.textContent;
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const res = await fetch(`${API}/api/admin/content`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updates })
+    });
+
+    btn.textContent = oldText;
+    btn.disabled = false;
+
+    if (res.ok) {
+      showToast('Website content updated successfully!', 'success');
+      loadData();
+    } else {
+      showToast('Failed to update content', 'error');
+    }
+  }
+
+  /* ── Toast ── */
+  function showToast(msg, type='success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── Init ── */
+  checkSession();
+</script>
+</body>
+</html>
