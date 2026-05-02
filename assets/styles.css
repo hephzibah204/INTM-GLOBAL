@@ -785,9 +785,9 @@ footer {
   .stat-num { font-size: 2.2rem; }
 
   .course-grid, .project-grid, .membership-grid { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .team-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
   .collab-layout, .projects-intro { grid-template-columns: 1fr; gap: 40px; }
-  .partner-logos { grid-template-columns: 1fr 1fr; }
+  .partner-logos { grid-template-columns: 1fr !important; gap: 20px !important; }
   .workshop-item { grid-template-columns: 60px 1fr; }
   .workshop-action { grid-column: 1/-1; text-align: left; }
   .footer-grid { grid-template-columns: 1fr; }
