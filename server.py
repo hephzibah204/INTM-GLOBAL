@@ -318,7 +318,7 @@ def admin_submissions():
     contact  = rows_to_list(build_query("contact_submissions",
                              ["name","email","subject","message"]))
     member   = rows_to_list(build_query("membership_submissions",
-                             ["name","email","tier"]))
+                             ["name","email","phone","tier","cv_path"]))
     collab   = rows_to_list(build_query("collaboration_submissions",
                              ["organisation","contact_name","email","collab_type","message"]))
     workshop = rows_to_list(build_query("workshop_submissions",
