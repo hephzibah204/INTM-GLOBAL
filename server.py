@@ -51,27 +51,30 @@ def init_db():
     """)
 
         CREATE TABLE IF NOT EXISTS membership_submissions (
-            id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            name       TEXT NOT NULL,
-            email      TEXT NOT NULL,
-            phone      TEXT,
-            tier       TEXT,
-            cv_path    TEXT,
-            status     TEXT DEFAULT 'new',
-            created_at TEXT DEFAULT (datetime('now'))
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            name          TEXT NOT NULL,
+            email         TEXT NOT NULL,
+            phone         TEXT,
+            tier          TEXT,
+            role          TEXT,
+            qualifications TEXT,
+            cv_path       TEXT,
+            status        TEXT DEFAULT 'new',
+            created_at    TEXT DEFAULT (datetime('now'))
         )
     """)
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS workshop_submissions (
-            id           INTEGER PRIMARY KEY AUTOINCREMENT,
-            name         TEXT NOT NULL,
-            email        TEXT NOT NULL,
-            phone        TEXT,
-            workshop     TEXT,
-            message      TEXT,
-            status       TEXT DEFAULT 'new',
-            created_at   TEXT DEFAULT (datetime('now'))
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            name          TEXT NOT NULL,
+            email         TEXT NOT NULL,
+            phone         TEXT,
+            designation   TEXT,
+            workshop      TEXT,
+            message       TEXT,
+            status        TEXT DEFAULT 'new',
+            created_at    TEXT DEFAULT (datetime('now'))
         )
     """)
 
@@ -206,8 +209,8 @@ def submit_membership():
 
     conn = get_db()
     conn.execute(
-        "INSERT INTO membership_submissions (name,email,phone,tier,cv_path) VALUES (?,?,?,?,?)",
-        (d.get("name"), d.get("email"), d.get("phone"), d.get("tier"), cv_filename)
+        "INSERT INTO membership_submissions (name,email,phone,tier,role,qualifications,cv_path) VALUES (?,?,?,?,?,?,?)",
+        (d.get("name"), d.get("email"), d.get("phone"), d.get("tier"), d.get("role"), d.get("qualifications"), cv_filename)
     )
     conn.commit()
     conn.close()
@@ -224,8 +227,8 @@ def submit_workshop():
 
     conn = get_db()
     conn.execute(
-        "INSERT INTO workshop_submissions (name,email,phone,workshop,message) VALUES (?,?,?,?,?)",
-        (d.get("name"), d.get("email"), d.get("phone"), d.get("workshop"), d.get("message"))
+        "INSERT INTO workshop_submissions (name,email,phone,designation,workshop,message) VALUES (?,?,?,?,?,?)",
+        (d.get("name"), d.get("email"), d.get("phone"), d.get("designation"), d.get("workshop"), d.get("message"))
     )
     conn.commit()
     conn.close()
@@ -321,11 +324,11 @@ def admin_submissions():
     contact  = rows_to_list(build_query("contact_submissions",
                              ["name","email","subject","message"]))
     member   = rows_to_list(build_query("membership_submissions",
-                             ["name","email","phone","tier","cv_path"]))
+                             ["name","email","phone","tier","role","qualifications","cv_path"]))
     collab   = rows_to_list(build_query("collaboration_submissions",
                              ["organisation","contact_name","email","collab_type","message"]))
     workshop = rows_to_list(build_query("workshop_submissions",
-                             ["name","email","workshop","message"]))
+                             ["name","email","phone","designation","workshop","message"]))
     creds    = rows_to_list(build_query("valid_credentials",
                              ["name","credential_id","type"]))
     conn.close()

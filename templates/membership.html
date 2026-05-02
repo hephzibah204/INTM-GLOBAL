@@ -57,19 +57,29 @@
     <h3>Membership Application</h3>
     <p id="selected-tier-text">Applying for: <strong>Associate</strong></p>
     
-    <form id="membershipForm" enctype="multipart/form-data">
-      <input type="hidden" id="tier" name="tier">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+          <label for="role">Current Role / Organisation</label>
+          <input type="text" id="role" name="role" placeholder="e.g. Clinical Nutritionist at Lagos GH">
+        </div>
       </div>
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone">
+        <label for="qualifications">Professional Qualifications</label>
+        <input type="text" id="qualifications" name="qualifications" placeholder="e.g. BSc Nutrition, RDN">
       </div>
       <div class="form-group">
         <label for="cv">Upload CV (PDF/DOCX) *</label>

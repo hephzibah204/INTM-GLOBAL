@@ -556,6 +556,8 @@
         { label:'Email',       val: r.email },
         { label:'Phone',       val: r.phone },
         { label:'Tier',        val: r.tier },
+        { label:'Role / Org',  val: r.role },
+        { label:'Qualifications', val: r.qualifications },
         { label:'CV / Resume', val: r.cv_path ? `<a href="/uploads/${r.cv_path}" target="_blank" style="color:var(--accent); font-weight:600;">📄 View CV</a>` : 'Not uploaded' },
         { label:'Submitted',   val: fmt(r.created_at) },
       ];
@@ -564,6 +566,7 @@
         { label:'Full Name',   val: r.name },
         { label:'Email',       val: r.email },
         { label:'Phone',       val: r.phone },
+        { label:'Designation', val: r.designation },
         { label:'Workshop',    val: r.workshop },
         { label:'Message',     val: r.message },
         { label:'Submitted',   val: fmt(r.created_at) },
