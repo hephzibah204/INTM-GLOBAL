@@ -11,7 +11,7 @@ $content = get_page_content('contact');
 </div>
 
 <section id="contact-section">
-  <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; padding: 80px 5%;">
+  <div class="contact-grid">
     <div class="contact-info reveal">
       <h2>Contact <em>Details</em></h2>
       <p style="margin-bottom: 30px; color: var(--mid);">Our administrative team is available Monday – Friday, 9:00 AM – 5:00 PM (WAT).</p>
@@ -33,9 +33,9 @@ $content = get_page_content('contact');
     </div>
 
     <div class="contact-form-container reveal">
-      <div class="form-card" style="box-shadow: 0 20px 40px rgba(0,0,0,0.05); padding: 40px; border-radius: 12px; background: white; border: 1px solid var(--border);">
+      <div class="form-card">
         <form id="contactForm">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="contact-form-row">
             <div class="form-group">
               <label for="name">Your Name</label>
               <input type="text" id="name" name="name" required>
@@ -60,6 +60,19 @@ $content = get_page_content('contact');
     </div>
   </div>
 </section>
+
+<style>
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+  .contact-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-card { box-shadow: 0 20px 40px rgba(0,0,0,0.05); padding: 40px; border-radius: 12px; background: white; border: 1px solid var(--border); }
+
+  @media (max-width: 768px) {
+    .contact-grid { grid-template-columns: 1fr; padding: 40px 5%; gap: 40px; }
+    .contact-form-row { grid-template-columns: 1fr; }
+    .form-card { padding: 25px; }
+    .contact-info { text-align: center; }
+  }
+</style>
 
 <script>
 document.getElementById('contactForm').onsubmit = async (e) => {
