@@ -13,6 +13,12 @@ from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, abort, session, render_template
 from flask_cors import CORS
 
+BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR     = os.path.join(BASE_DIR, "assets")
+DB_PATH        = os.path.join(BASE_DIR, "intm_submissions.db")
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "intm@2025"
+
 SECRET_KEY     = "intm-secret-key-change-in-production"
 UPLOAD_FOLDER  = os.path.join(BASE_DIR, "uploads")
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
@@ -20,7 +26,13 @@ ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="")
+TEMPLATE_DIR   = os.path.join(BASE_DIR, "templates")
+STATIC_DIR     = os.path.join(BASE_DIR, "assets")
+
+app = Flask(__name__, 
+            template_folder=TEMPLATE_DIR,
+            static_folder=STATIC_DIR, 
+            static_url_path="")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = SECRET_KEY
 CORS(app, supports_credentials=True)        # allow fetch() from same origin
@@ -527,10 +539,15 @@ def render_page(page="index"):
     
     # Render the template and pass the content dictionary
     try:
-        return render_template(f"{page}.html", content=content_dict)
-    except Exception:
-        # If template not found (e.g., they asked for a non-existent page)
-        abort(404)
+        # Check if the template exists
+        template_file = f"{page}.html"
+        return render_template(template_file, content=content_dict)
+    except Exception as e:
+        print(f"Error rendering {page}: {e}")
+        # Fallback to index if something goes wrong or 404
+        if page == "index":
+             return "Index template not found", 404
+        return render_page("index")
 
 @app.route("/uploads/<filename>")
 @login_required
