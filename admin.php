@@ -222,6 +222,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Initial Status</label>
                     <select name="status" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
                         <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
                         <option value="Revoked">Revoked</option>
                         <option value="Expired">Expired</option>
                     </select>
@@ -274,12 +275,17 @@ if (!isset($_SESSION['admin_logged_in'])) {
             // Render Credentials
             let cHtml = `<table><thead><tr><th>Name</th><th>ID</th><th>Type</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
             currentData.credentials.forEach(c => {
+                const opts = ['Active', 'Inactive', 'Revoked', 'Expired'].map(s => `<option value="${s}" ${c.status === s ? 'selected' : ''}>${s}</option>`).join('');
                 cHtml += `
                     <tr>
                         <td>${c.name}</td>
                         <td><code>${c.credential_id}</code></td>
                         <td>${c.type}</td>
-                        <td>${c.status}</td>
+                        <td>
+                            <select onchange="updateCredStatus(${c.id}, this.value)" style="padding:6px 8px; border:1px solid #ddd; border-radius:6px; background:white;">
+                                ${opts}
+                            </select>
+                        </td>
                         <td><button class="btn-action" onclick="deleteCred(${c.id})">Delete</button></td>
                     </tr>
                 `;
@@ -364,6 +370,14 @@ if (!isset($_SESSION['admin_logged_in'])) {
             await fetch('api/admin_actions.php', {
                 method: 'POST',
                 body: JSON.stringify({ action: 'delete_cred', id })
+            });
+            loadData();
+        }
+
+        async function updateCredStatus(id, status) {
+            await fetch('api/admin_actions.php', {
+                method: 'POST',
+                body: JSON.stringify({ action: 'toggle_cred_status', id, status })
             });
             loadData();
         }
