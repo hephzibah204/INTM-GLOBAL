@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership | INTM Global</title>
+  <meta name="description" content="Join INTM Global membership tiers to access professional recognition, resources, CPD support, and a thriving community of nutrition practitioners.">
+  <meta name="keywords" content="INTM membership, professional membership, nutrition membership, CPD, FINTM, MINTM">
+  <meta property="og:title" content="Membership | INTM Global">
+  <meta property="og:description" content="Join a thriving professional community dedicated to advancing nutritional therapy and public health.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./Images/Others/hero_community.jpg">
+  <meta property="og:url" content="https://www.intmglobal.org/membership.html">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a href="./index.html" class="nav-logo">
+      <img src="./Images/logo/intmgloballogo.jpg" alt="INTM Logo" style="height: 52px; width: auto; object-fit: contain;">
+      <div class="nav-logo-text">
+        <strong>INTM</strong>
+        <span>Nutritional Therapy Management</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+
+      <li class="nav-dropdown">
+        <details open>
+          <summary>Programs <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./courses.html">All Courses</a>
+            <a href="./workshops.html">Workshops &amp; Seminars</a>
+            <a href="./membership.html" aria-current="page">Professional Membership</a>
+            <a href="./projects.html">Research Projects</a>
+          </div>
+        </details>
+      </li>
+
+      <li class="nav-dropdown">
+        <details>
+          <summary>Collaborations <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./collaborations.html">Partnerships</a>
+            <a href="./collaboration-form.html">Become a Collaborator</a>
+          </div>
+        </details>
+      </li>
+
+      <li class="nav-dropdown">
+        <details>
+          <summary>Institute <span class="caret">▾</span></summary>
+          <div class="dropdown-menu">
+            <a href="./about.html">About Us</a>
+            <a href="./team.html">Our Team</a>
+            <a href="./accreditation.html">Accreditation</a>
+            <a href="./reports.html">Annual Reports</a>
+            <a href="./careers.html">Careers</a>
+            <a href="./verify.html">Verify Credentials</a>
+            <a href="./contact.html">Contact Us</a>
+          </div>
+        </details>
+      </li>
+    </ul>
+
+    <a href="./membership.html" class="nav-cta">Join INTM</a>
+
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html">Home</a>
+    <div class="mobile-menu-title">Programs</div>
+    <a href="./courses.html">Courses</a>
+    <a href="./workshops.html">Workshops</a>
+    <a href="./membership.html">Membership</a>
+    <a href="./projects.html">Projects</a>
+
+    <div class="mobile-menu-title">Collaborations</div>
+    <a href="./collaborations.html">Partnerships</a>
+    <a href="./collaboration-form.html">Become a Collaborator</a>
+
+    <div class="mobile-menu-title">Institute</div>
+    <a href="./about.html">About Us</a>
+    <a href="./team.html">Our Team</a>
+    <a href="./accreditation.html">Accreditation</a>
+    <a href="./reports.html">Annual Reports</a>
+    <a href="./careers.html">Careers</a>
+    <a href="./verify.html">Verify Credentials</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+
+  <main>
+    <div class="page-hero">
+      <div class="section-label">Professional Community</div>
+      <h1>Membership <em>Tiers</em></h1>
+      <p>INTM membership opens doors to exclusive resources, professional recognition, peer networks, and career advancement opportunities.</p>
+    </div>
+
+    <section id="membership">
+      <div class="membership-header reveal">
+        <div class="section-label">Membership</div>
+        <h2>Join a <em>Thriving Community</em></h2>
+        <p class="section-intro">Select a tier that matches your career stage. Applications are reviewed by the Institute for eligibility and documentation.</p>
+      </div>
+
+      <div class="membership-grid">
+        <div class="mem-card reveal">
+          <h3>Associate Member</h3>
+          <p style="font-size:14px;color:var(--soft);">Students &amp; newly qualified practitioners</p>
+          <div class="mem-price">₦15,000</div>
+          <div class="mem-period">per year</div>
+          <ul class="mem-features">
+            <li>Access to INTM digital library</li>
+            <li>Monthly webinars &amp; learning resources</li>
+            <li>Discounted course fees</li>
+            <li>Member certificate</li>
+            <li>Community networking</li>
+          </ul>
+          <a href="#" class="mem-btn mem-btn-outline" data-open-membership="Associate Member">Apply Now</a>
+        </div>
+
+        <div class="mem-card featured reveal">
+          <div class="mem-badge">Most Popular</div>
+          <h3>Full Member</h3>
+          <p style="font-size:14px;color:rgba(255,255,255,0.6);">Qualified nutritionists &amp; dietitians</p>
+          <div class="mem-price">₦50,000</div>
+          <div class="mem-period">per year</div>
+          <ul class="mem-features">
+            <li>All Associate benefits</li>
+            <li>Voting rights in AGMs</li>
+            <li>Use of post-nominal MINTM</li>
+            <li>CPD support &amp; tracking</li>
+            <li>Member-only benefits</li>
+            <li>Priority workshop access</li>
+          </ul>
+          <a href="#" class="mem-btn mem-btn-solid" data-open-membership="Full Member">Apply Now</a>
+        </div>
+
+        <div class="mem-card reveal">
+          <h3>Fellow</h3>
+          <p style="font-size:14px;color:var(--soft);">Senior practitioners &amp; academics</p>
+          <div class="mem-price">₦120,000</div>
+          <div class="mem-period">per year</div>
+          <ul class="mem-features">
+            <li>All Full Member benefits</li>
+            <li>Use of post-nominal FINTM</li>
+            <li>Research publication support</li>
+            <li>Seat on advisory committees</li>
+            <li>Leadership &amp; speaking invites</li>
+          </ul>
+          <a href="#" class="mem-btn mem-btn-outline" data-open-membership="Fellow">Apply Now</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal-overlay" id="membershipModal">
+      <div class="modal-content">
+        <span class="close-btn" data-close-membership>&times;</span>
+        <h3>Membership Application</h3>
+        <p id="selected-tier-text">Applying for: <strong>Associate Member</strong></p>
+
+        <form id="membershipForm" enctype="multipart/form-data">
+          <input type="hidden" id="tier" name="tier">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+              <label for="role">Current Role / Organisation</label>
+              <input type="text" id="role" name="role" placeholder="e.g. Clinical Nutritionist">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="qualifications">Professional Qualifications</label>
+            <input type="text" id="qualifications" name="qualifications" placeholder="e.g. BSc Nutrition, RDN">
+          </div>
+          <div class="form-group">
+            <label for="cv">Upload CV (PDF/DOC/DOCX)</label>
+            <input type="file" id="cv" name="cv" accept=".pdf,.docx,.doc" required style="padding: 8px 0; background: transparent; border: none;">
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">Submit Application</button>
+        </form>
+        <div id="form-message" style="margin-top: 16px; display: none; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid var(--border);"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="./index.html" class="nav-logo" style="text-decoration:none;">
+          <img src="./Images/logo/intmgloballogo.jpg" alt="INTM Logo" style="height: 52px; width: auto; object-fit: contain;">
+          <div class="nav-logo-text">
+            <strong style="color:white;">INTM</strong>
+            <span>Institute of Nutritional Therapy Management</span>
+          </div>
+        </a>
+        <p>Advancing evidence-based nutritional science, professional practice, and community health across Africa and beyond.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Institute</h4>
+        <ul>
+          <li><a href="./about.html">About INTM</a></li>
+          <li><a href="./team.html">Our Team</a></li>
+          <li><a href="./accreditation.html">Accreditation</a></li>
+          <li><a href="./verify.html">Verify Credentials</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="./courses.html">All Courses</a></li>
+          <li><a href="./workshops.html">Workshops</a></li>
+          <li><a href="./projects.html">Research</a></li>
+          <li><a href="./membership.html">Membership</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@intmglobal.org">✉️ info@intmglobal.org</a></li>
+          <li><a href="https://www.intmglobal.org" target="_blank" rel="noopener">🌐 www.intmglobal.org</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Institute of Nutritional Therapy Management. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Twitter">𝕏</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script src="./assets/site.js" defer></script>
+</body>
+</html>

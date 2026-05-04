@@ -76,6 +76,21 @@ try {
         updated_at TEXT DEFAULT (datetime('now'))
     )");
 
+    $ensure_column = function (string $table, string $column, string $definition) use ($db) {
+        $cols = $db->query("PRAGMA table_info($table)")->fetchAll();
+        foreach ($cols as $c) {
+            if (($c['name'] ?? null) === $column) return;
+        }
+        $db->exec("ALTER TABLE $table ADD COLUMN $column $definition");
+    };
+
+    $ensure_column('membership_submissions', 'tier', 'TEXT');
+    $ensure_column('membership_submissions', 'role', 'TEXT');
+    $ensure_column('membership_submissions', 'qualifications', 'TEXT');
+    $ensure_column('membership_submissions', 'cv_path', 'TEXT');
+    $ensure_column('membership_submissions', 'status', "TEXT DEFAULT 'new'");
+    $ensure_column('membership_submissions', 'created_at', "TEXT DEFAULT (datetime('now'))");
+
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }

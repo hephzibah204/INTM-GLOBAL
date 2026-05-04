@@ -33,90 +33,295 @@
     if (menu) menu.classList.toggle('open');
   };
 
-  const membershipForm = document.getElementById('membershipForm');
-  if (membershipForm) {
-    const tierSelect = document.getElementById('tier');
-    if (tierSelect) {
-      const url = new URL(window.location.href);
-      const tierParam = url.searchParams.get('tier');
-      if (tierParam) tierSelect.value = tierParam;
+  const setBoxMessage = (box, ok, text) => {
+    if (!box) return;
+    box.style.display = 'block';
+    box.textContent = text;
+    box.style.background = ok ? 'rgba(90,122,94,0.1)' : 'rgba(181,135,74,0.1)';
+    box.style.color = ok ? 'var(--sage-dark)' : 'var(--earth)';
+    box.style.borderColor = ok ? 'var(--sage)' : 'var(--earth)';
+  };
+
+  const postJson = async (url, data) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    let json = null;
+    try {
+      json = await res.json();
+    } catch (_) {
+      json = null;
+    }
+    return { res, json };
+  };
+
+  const getUrlParam = (key) => {
+    try {
+      return new URL(window.location.href).searchParams.get(key);
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const membershipModal = document.getElementById('membershipModal');
+  const tierInput = document.getElementById('tier');
+  const tierText = document.getElementById('selected-tier-text');
+
+  const openMembership = (tier) => {
+    if (!membershipModal) return;
+    if (tierInput) tierInput.value = tier || '';
+    if (tierText && tier) tierText.innerHTML = `Applying for: <strong>${tier}</strong>`;
+    membershipModal.classList.add('active');
+  };
+  const closeMembership = () => {
+    if (!membershipModal) return;
+    membershipModal.classList.remove('active');
+  };
+
+  window.openModal = openMembership;
+  window.closeModal = closeMembership;
+
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('[data-open-membership]');
+    if (openBtn) {
+      const tier = openBtn.getAttribute('data-open-membership') || '';
+      openMembership(tier);
+      return;
     }
 
-    membershipForm.addEventListener('submit', (e) => {
+    const closeBtn = e.target.closest('[data-close-membership]');
+    if (closeBtn) {
+      closeMembership();
+      return;
+    }
+
+    if (membershipModal && e.target === membershipModal) {
+      closeMembership();
+    }
+  });
+
+  const membershipForm = document.getElementById('membershipForm');
+  if (membershipForm) {
+    const tierParam = getUrlParam('tier');
+    if (tierParam && tierInput) tierInput.value = tierParam;
+
+    membershipForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const btn = membershipForm.querySelector('button[type="submit"]');
+      const msgBox =
+        membershipForm.closest('.modal-content')?.querySelector('#form-message') ||
+        document.getElementById('form-message');
 
-      const nameEl = document.getElementById('name');
-      const emailEl = document.getElementById('email');
-      const phoneEl = document.getElementById('phone');
-      const tierEl = document.getElementById('tier');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+      }
 
-      const name = nameEl ? nameEl.value : '';
-      const email = emailEl ? emailEl.value : '';
-      const phone = phoneEl ? phoneEl.value : '';
-      const tier = tierEl ? tierEl.value : '';
-
-      const subject = encodeURIComponent(`Membership Application: ${tier} - ${name}`);
-      const body = encodeURIComponent(
-        `Hello INTM Global,\n\nI am interested in joining as a ${tier}.\n\nDetails:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nPlease let me know the next steps.\n\nBest regards,\n${name}`
-      );
-
-      window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
+      try {
+        const formData = new FormData(membershipForm);
+        const res = await fetch('./api/submit_membership.php', { method: 'POST', body: formData });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          setBoxMessage(msgBox, true, 'Application received! We will review your submission and contact you shortly.');
+          membershipForm.reset();
+          setTimeout(closeMembership, 900);
+        } else {
+          setBoxMessage(msgBox, false, data.error || 'Submission failed.');
+        }
+      } catch (_) {
+        setBoxMessage(msgBox, false, 'Connection error. Please try again.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Submit Application';
+        }
+      }
     });
   }
 
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const nameEl = document.getElementById('contact-name');
-      const emailEl = document.getElementById('contact-email');
-      const phoneEl = document.getElementById('contact-phone');
-      const subjectEl = document.getElementById('contact-subject');
-      const messageEl = document.getElementById('contact-message');
+      const btn = contactForm.querySelector('button[type="submit"]');
+      const msgBox = document.getElementById('form-message');
 
-      const name = nameEl ? nameEl.value : '';
-      const email = emailEl ? emailEl.value : '';
-      const phone = phoneEl ? phoneEl.value : '';
-      const subjectText = subjectEl ? subjectEl.value : '';
-      const message = messageEl ? messageEl.value : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+      }
 
-      const subject = encodeURIComponent(subjectText ? `Contact: ${subjectText}` : 'Website Contact');
-      const body = encodeURIComponent(
-        `Hello INTM Global,\n\n${message}\n\nContact details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nBest regards,\n${name}`
-      );
-
-      window.location.href = `mailto:info@intm.org.ng?subject=${subject}&body=${body}`;
+      try {
+        const formData = new FormData(contactForm);
+        const payload = Object.fromEntries(formData.entries());
+        const { res, json } = await postJson('./api/submit_contact.php', payload);
+        if (res.ok) {
+          setBoxMessage(msgBox, true, 'Message sent successfully! Our team will get back to you shortly.');
+          contactForm.reset();
+        } else {
+          setBoxMessage(msgBox, false, (json && json.error) || 'Failed to send message.');
+        }
+      } catch (_) {
+        setBoxMessage(msgBox, false, 'Connection error. Please try again.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+        }
+      }
     });
   }
 
-  const collaborationForm = document.getElementById('collaborationForm');
-  if (collaborationForm) {
-    collaborationForm.addEventListener('submit', (e) => {
+  const collabForm = document.getElementById('collabForm') || document.getElementById('collaborationForm');
+  if (collabForm) {
+    collabForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const orgEl = document.getElementById('collab-org');
-      const nameEl = document.getElementById('collab-name');
-      const emailEl = document.getElementById('collab-email');
-      const phoneEl = document.getElementById('collab-phone');
-      const websiteEl = document.getElementById('collab-website');
-      const typeEl = document.getElementById('collab-type');
-      const messageEl = document.getElementById('collab-message');
+      const btn = collabForm.querySelector('button[type="submit"]');
+      const msgBox = document.getElementById('form-message');
 
-      const org = orgEl ? orgEl.value : '';
-      const name = nameEl ? nameEl.value : '';
-      const email = emailEl ? emailEl.value : '';
-      const phone = phoneEl ? phoneEl.value : '';
-      const website = websiteEl ? websiteEl.value : '';
-      const collabType = typeEl ? typeEl.value : '';
-      const message = messageEl ? messageEl.value : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+      }
 
-      const subject = encodeURIComponent(`Collaboration Request: ${collabType || 'Enquiry'} - ${org || name}`);
-      const body = encodeURIComponent(
-        `Hello INTM Global,\n\nI would like to collaborate with INTM.\n\nMessage:\n${message}\n\nDetails:\nOrganisation: ${org}\nContact person: ${name}\nEmail: ${email}\nPhone: ${phone}\nWebsite: ${website}\nCollaboration type: ${collabType}\n\nBest regards,\n${name}`
-      );
+      try {
+        const formData = new FormData(collabForm);
+        const payload = Object.fromEntries(formData.entries());
+        const { res, json } = await postJson('./api/submit_collaboration.php', payload);
+        if (res.ok) {
+          setBoxMessage(msgBox, true, 'Proposal received! Our team will review and contact you shortly.');
+          collabForm.reset();
+        } else {
+          setBoxMessage(msgBox, false, (json && json.error) || 'Submission failed.');
+        }
+      } catch (_) {
+        setBoxMessage(msgBox, false, 'Connection error. Please try again.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Submit Proposal';
+        }
+      }
+    });
+  }
 
-      window.location.href = `mailto:direct@intmglobal.org?subject=${subject}&body=${body}`;
+  const workshopForm = document.getElementById('workshopForm');
+  if (workshopForm) {
+    const selected = getUrlParam('event');
+    if (selected) {
+      const select = workshopForm.querySelector('select[name="workshop"]');
+      if (select) {
+        Array.from(select.options).some((opt) => {
+          if (String(opt.value).toLowerCase().includes(String(selected).toLowerCase())) {
+            opt.selected = true;
+            return true;
+          }
+          return false;
+        });
+      }
+    }
+
+    workshopForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = workshopForm.querySelector('button[type="submit"]');
+      const msgBox = document.getElementById('form-message');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+      }
+
+      try {
+        const formData = new FormData(workshopForm);
+        const payload = Object.fromEntries(formData.entries());
+        const { res, json } = await postJson('./api/submit_workshop.php', payload);
+        if (res.ok) {
+          setBoxMessage(msgBox, true, 'Registration successful! We will contact you shortly with further details.');
+          workshopForm.reset();
+        } else {
+          setBoxMessage(msgBox, false, (json && json.error) || 'Registration failed.');
+        }
+      } catch (_) {
+        setBoxMessage(msgBox, false, 'Connection error. Please try again.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Complete Registration';
+        }
+      }
+    });
+  }
+
+  const tabButtons = document.querySelectorAll('[data-tab]');
+  const certificateTab = document.getElementById('certificate-tab');
+  const membershipTab = document.getElementById('membership-tab');
+  const verifyResult = document.getElementById('verify-result');
+  const certForm = document.getElementById('certForm');
+  const memberVerifyForm = document.getElementById('memberVerifyForm');
+
+  if (tabButtons.length && certificateTab && membershipTab && verifyResult) {
+    const switchTab = (activeBtn, tabId) => {
+      tabButtons.forEach((b) => {
+        b.classList.remove('active');
+        b.style.borderBottomColor = 'transparent';
+        b.style.color = 'var(--soft)';
+      });
+      activeBtn.classList.add('active');
+      activeBtn.style.borderBottomColor = 'var(--sage)';
+      activeBtn.style.color = 'var(--sage-dark)';
+
+      certificateTab.style.display = tabId === 'certificate' ? 'block' : 'none';
+      membershipTab.style.display = tabId === 'membership' ? 'block' : 'none';
+      verifyResult.style.display = 'none';
+    };
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        if (tabId) switchTab(btn, tabId);
+      });
+    });
+  }
+
+  const handleVerify = async (form, type) => {
+    if (!form || !verifyResult) return;
+    const id = form.querySelector('[name="credential_id"]')?.value || '';
+    verifyResult.style.display = 'block';
+    verifyResult.textContent = 'Verifying...';
+    verifyResult.style.background = 'var(--cream)';
+
+    try {
+      const { res, json } = await postJson('./api/verify.php', { credential_id: id, type });
+      const valid = Boolean(json && json.valid);
+      verifyResult.style.background = valid ? 'rgba(90,122,94,0.1)' : 'rgba(181,135,74,0.1)';
+      verifyResult.style.borderColor = valid ? 'var(--sage)' : 'var(--earth)';
+
+      const title = valid ? '✅ Valid Credential' : '❌ Verification Failed';
+      const titleColor = valid ? 'var(--sage-dark)' : 'var(--earth)';
+      const msg = (json && json.message) || (res.ok ? 'Verified.' : 'Verification failed.');
+      verifyResult.innerHTML = `<h4 style="color:${titleColor}">${title}</h4><p>${msg}</p>`;
+    } catch (_) {
+      verifyResult.style.background = 'rgba(181,135,74,0.1)';
+      verifyResult.style.borderColor = 'var(--earth)';
+      verifyResult.textContent = 'An error occurred during verification.';
+    }
+  };
+
+  if (certForm) {
+    certForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleVerify(certForm, 'Certificate');
+    });
+  }
+
+  if (memberVerifyForm) {
+    memberVerifyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleVerify(memberVerifyForm, 'Membership');
     });
   }
 })();
