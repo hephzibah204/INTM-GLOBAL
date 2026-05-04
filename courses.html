@@ -21,6 +21,67 @@
   <meta name="twitter:image" content="https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png">
   <meta name="twitter:url" content="https://www.intmglobal.org/courses.html">
   <link rel="icon" href="https://www.intmglobal.org/Images/logo/intmgloballogo.jpg">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.intmglobal.org/#organization",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/logo/intmgloballogo.jpg"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.intmglobal.org/#website",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "publisher": {
+            "@id": "https://www.intmglobal.org/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.intmglobal.org/courses.html#webpage",
+          "url": "https://www.intmglobal.org/courses.html",
+          "name": "Courses & Training | INTM Global",
+          "description": "Explore INTM Global courses and training programs designed for real-world impact in nutritional therapy, clinical practice, and community health.",
+          "isPartOf": {
+            "@id": "https://www.intmglobal.org/#website"
+          },
+          "about": {
+            "@id": "https://www.intmglobal.org/#organization"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.intmglobal.org/courses.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.intmglobal.org/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Courses",
+              "item": "https://www.intmglobal.org/courses.html"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
 </head>

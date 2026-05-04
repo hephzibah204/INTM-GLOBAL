@@ -21,6 +21,67 @@
   <meta name="twitter:image" content="https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png">
   <meta name="twitter:url" content="https://www.intmglobal.org/accreditation.html">
   <link rel="icon" href="https://www.intmglobal.org/Images/logo/intmgloballogo.jpg">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.intmglobal.org/#organization",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/logo/intmgloballogo.jpg"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.intmglobal.org/#website",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "publisher": {
+            "@id": "https://www.intmglobal.org/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.intmglobal.org/accreditation.html#webpage",
+          "url": "https://www.intmglobal.org/accreditation.html",
+          "name": "Accreditation | INTM Global",
+          "description": "Accreditation and professional standards at INTM Global. Learn how our programs align with evidence-based practice and quality assurance.",
+          "isPartOf": {
+            "@id": "https://www.intmglobal.org/#website"
+          },
+          "about": {
+            "@id": "https://www.intmglobal.org/#organization"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.intmglobal.org/accreditation.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.intmglobal.org/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Accreditation",
+              "item": "https://www.intmglobal.org/accreditation.html"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
@@ -113,6 +174,79 @@
             <a href="./verify.html" class="btn-secondary" style="margin-left: 12px;">Verify Credentials →</a>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section style="padding: 80px 5%; background: var(--bg);">
+      <div style="max-width: 1100px; margin: 0 auto;">
+        <div class="reveal" style="max-width: 900px;">
+          <h2>What Accreditation <em>Means</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">Accreditation is our commitment to structured learning outcomes, transparent assessment, ethical practice, and continuous improvement. It supports public trust and helps learners and employers understand the competence expected of certified practitioners.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px;">
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Curriculum Quality</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Clear outcomes, evidence-based content, and practical application to real-world settings.</p>
+          </div>
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Assessment Integrity</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Consistent assessment standards that verify competence, not just attendance.</p>
+          </div>
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Professional Ethics</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Guidance on ethical practice, scope of work, and responsible communication.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 80px 5%; background:white;">
+      <div style="max-width: 980px; margin: 0 auto;">
+        <div class="reveal">
+          <h2>Quality Assurance <em>Framework</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">INTM Global maintains a structured quality assurance approach for program delivery and professional recognition. This includes periodic reviews of learning outcomes, assessment methods, and learner support systems.</p>
+          <ul style="color: var(--mid); line-height: 1.9; margin: 14px 0 0; padding-left: 20px;">
+            <li>Defined learning outcomes and competency expectations per program.</li>
+            <li>Documented assessment methods and performance criteria.</li>
+            <li>Ongoing feedback loops from learners, faculty, and partners.</li>
+            <li>Continuous improvement through review cycles and updates.</li>
+          </ul>
+        </div>
+
+        <div class="reveal" style="margin-top: 40px;">
+          <h2>Verification &amp; <em>Registry</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">To support transparency, INTM provides a public verification experience where applicable. If you need to confirm a credential or membership status, use the verification page or contact the Institute.</p>
+          <div style="margin-top: 18px;">
+            <a href="./verify.html" class="btn-primary">Verify a Credential</a>
+            <a href="./contact.html" class="btn-secondary" style="margin-left: 12px;">Accreditation Enquiry →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="faq-header">
+        <h2>Accreditation <em>FAQ</em></h2>
+        <p>Answers to common questions about standards, recognition, and verification.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Does accreditation mean a program is “government approved”?</summary>
+          <div class="faq-body">Accreditation refers to the Institute’s standards and quality processes. If a program carries additional external recognition, it will be stated clearly in the program information.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How can I verify a certificate or membership?</summary>
+          <div class="faq-body">Use the Verify Credentials page to search by credential ID or member details. If you need help, contact the Institute.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I request an accreditation letter or confirmation?</summary>
+          <div class="faq-body">Yes. Send an enquiry via the contact page with the details of the program and the information you need for confirmation.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How often are standards reviewed?</summary>
+          <div class="faq-body">Standards are reviewed periodically based on program cycles, new evidence, and feedback from faculty, learners, and partners.</div>
+        </details>
       </div>
     </section>
   </main>

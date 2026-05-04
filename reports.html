@@ -21,6 +21,67 @@
   <meta name="twitter:image" content="https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png">
   <meta name="twitter:url" content="https://www.intmglobal.org/reports.html">
   <link rel="icon" href="https://www.intmglobal.org/Images/logo/intmgloballogo.jpg">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.intmglobal.org/#organization",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/logo/intmgloballogo.jpg"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.intmglobal.org/#website",
+          "name": "INTM Global",
+          "url": "https://www.intmglobal.org/",
+          "publisher": {
+            "@id": "https://www.intmglobal.org/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.intmglobal.org/reports.html#webpage",
+          "url": "https://www.intmglobal.org/reports.html",
+          "name": "Annual Reports | INTM Global",
+          "description": "Access INTM Global annual reports and institutional updates highlighting our progress in education, research, and community health impact.",
+          "isPartOf": {
+            "@id": "https://www.intmglobal.org/#website"
+          },
+          "about": {
+            "@id": "https://www.intmglobal.org/#organization"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://www.intmglobal.org/Images/Others/Hero_Healthier_Community.png"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.intmglobal.org/reports.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.intmglobal.org/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Annual Reports",
+              "item": "https://www.intmglobal.org/reports.html"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
@@ -112,6 +173,88 @@
             <a href="./contact.html" class="btn-primary">Request a Report</a>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section style="padding: 80px 5%; background: var(--bg);">
+      <div style="max-width: 1100px; margin: 0 auto;">
+        <div class="reveal" style="max-width: 900px;">
+          <h2>What We <em>Publish</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">INTM Global reports support transparency and continuous improvement. Our updates may include program delivery highlights, research and community initiatives, membership growth, and strategic partnerships that advance nutritional therapy practice.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px;">
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Education</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Program milestones, learner outcomes, and improvements to curriculum and delivery.</p>
+          </div>
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Research</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Progress on projects, collaborations, and evidence-building for better practice.</p>
+          </div>
+          <div class="reveal" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+            <h3 style="margin: 0 0 10px;">Community Impact</h3>
+            <p style="margin:0; color: var(--mid); line-height: 1.8;">Programs and partnerships supporting nutrition literacy and public health outcomes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 80px 5%; background:white;">
+      <div style="max-width: 980px; margin: 0 auto;">
+        <div class="reveal">
+          <h2>Latest <em>Reports</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">As reports are published, they will appear here. For now, you can request documentation via the Institute.</p>
+          <div style="display:grid; gap: 14px; margin-top: 18px;">
+            <div style="border: 1px solid var(--border); border-radius: 12px; padding: 18px; display:flex; justify-content: space-between; gap: 16px; align-items: center;">
+              <div>
+                <strong>Annual Report</strong>
+                <div style="color: var(--mid); margin-top: 6px; line-height: 1.7;">Publication list will be updated as reports become available.</div>
+              </div>
+              <div style="color: var(--muted); white-space: nowrap;">Coming soon</div>
+            </div>
+            <div style="border: 1px solid var(--border); border-radius: 12px; padding: 18px; display:flex; justify-content: space-between; gap: 16px; align-items: center;">
+              <div>
+                <strong>Impact Summary</strong>
+                <div style="color: var(--mid); margin-top: 6px; line-height: 1.7;">Highlights from education, research, and community programs.</div>
+              </div>
+              <div style="color: var(--muted); white-space: nowrap;">Coming soon</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-top: 40px;">
+          <h2>Request a <em>Report</em></h2>
+          <p style="color: var(--mid); font-size: 16px; line-height: 1.9;">To request a report or documentation, include the report type, purpose (e.g., academic, partnership, due diligence), and any deadlines. The team will respond with availability and next steps.</p>
+          <div style="margin-top: 18px;">
+            <a href="./contact.html" class="btn-primary">Request Documentation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="faq-header">
+        <h2>Reports <em>FAQ</em></h2>
+        <p>Common questions about reports, access, and documentation requests.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Are reports publicly available?</summary>
+          <div class="faq-body">Published reports will be listed on this page. Some documentation may be provided on request depending on the purpose and availability.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What details should I include when requesting a report?</summary>
+          <div class="faq-body">Include the report type, intended use, timeframe, and any specific data you need. This helps the team respond quickly and accurately.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can partners request tailored impact summaries?</summary>
+          <div class="faq-body">Yes. For partnerships and due diligence, the Institute can provide relevant summaries and supporting documentation where available.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How often are reports updated?</summary>
+          <div class="faq-body">Report publication depends on program and reporting cycles. This page is updated as new reports are released.</div>
+        </details>
       </div>
     </section>
   </main>
