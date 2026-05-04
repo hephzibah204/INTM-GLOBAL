@@ -691,6 +691,46 @@ h2 em { color: var(--sage); font-style: italic; }
 }
 .btn-outline-white:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
+.faq-section { padding: 72px 5%; background: var(--warm-white); }
+.faq-header { margin-bottom: 28px; }
+.faq-header .section-label { margin-bottom: 10px; }
+.faq-header h2 { margin-bottom: 10px; }
+.faq-header p { color: var(--mid); max-width: 780px; line-height: 1.8; }
+
+.faq-list { max-width: 1000px; margin: 0 auto; display: grid; gap: 12px; }
+.faq-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 18px 20px;
+  font-weight: 600;
+  color: var(--charcoal);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  font-size: 18px;
+  color: var(--soft);
+  flex: 0 0 auto;
+}
+.faq-item[open] summary::after { content: '–'; }
+.faq-item .faq-body {
+  padding: 0 20px 18px;
+  color: var(--mid);
+  line-height: 1.8;
+}
+.faq-item .faq-body a { color: var(--sage-dark); }
+
 /* ─── FOOTER ─── */
 footer {
   background: var(--charcoal); color: rgba(255,255,255,0.6);
@@ -763,7 +803,7 @@ footer {
 
 /* ─── RESPONSIVE ─── */
 @media (min-width: 1025px) {
-  .hero-layout { grid-template-columns: 1fr 1.5fr; }
+  .hero-layout { grid-template-columns: 1fr 1.75fr; }
 }
 
 @media (max-width: 1024px) {
