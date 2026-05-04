@@ -33,6 +33,35 @@
     if (menu) menu.classList.toggle('open');
   };
 
+  const navDetails = Array.from(document.querySelectorAll('.nav-dropdown details'));
+  if (navDetails.length) {
+    navDetails.forEach((d) => d.removeAttribute('open'));
+
+    navDetails.forEach((d) => {
+      d.addEventListener('toggle', () => {
+        if (!d.open) return;
+        navDetails.forEach((other) => {
+          if (other !== d) other.removeAttribute('open');
+        });
+      });
+
+      const links = d.querySelectorAll('a');
+      links.forEach((a) => {
+        a.addEventListener('click', () => d.removeAttribute('open'));
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-dropdown')) return;
+      navDetails.forEach((d) => d.removeAttribute('open'));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      navDetails.forEach((d) => d.removeAttribute('open'));
+    });
+  }
+
   const setBoxMessage = (box, ok, text) => {
     if (!box) return;
     box.style.display = 'block';
