@@ -14,13 +14,15 @@ try {
         'contact' => ['total' => $db->query("SELECT COUNT(*) FROM contact_submissions")->fetchColumn(), 'new' => $db->query("SELECT COUNT(*) FROM contact_submissions WHERE status='new'")->fetchColumn()],
         'membership' => ['total' => $db->query("SELECT COUNT(*) FROM membership_submissions")->fetchColumn(), 'new' => $db->query("SELECT COUNT(*) FROM membership_submissions WHERE status='new'")->fetchColumn()],
         'workshop' => ['total' => $db->query("SELECT COUNT(*) FROM workshop_submissions")->fetchColumn(), 'new' => $db->query("SELECT COUNT(*) FROM workshop_submissions WHERE status='new'")->fetchColumn()],
+        'collaboration' => ['total' => $db->query("SELECT COUNT(*) FROM collaboration_submissions")->fetchColumn(), 'new' => $db->query("SELECT COUNT(*) FROM collaboration_submissions WHERE status='new'")->fetchColumn()],
     ];
-    $stats['all_new'] = $stats['contact']['new'] + $stats['membership']['new'] + $stats['workshop']['new'];
+    $stats['all_new'] = $stats['contact']['new'] + $stats['membership']['new'] + $stats['workshop']['new'] + $stats['collaboration']['new'];
 
     $submissions = [
         'membership' => $db->query("SELECT * FROM membership_submissions ORDER BY created_at DESC")->fetchAll(),
         'workshop' => $db->query("SELECT * FROM workshop_submissions ORDER BY created_at DESC")->fetchAll(),
         'contact' => $db->query("SELECT * FROM contact_submissions ORDER BY created_at DESC")->fetchAll(),
+        'collaboration' => $db->query("SELECT * FROM collaboration_submissions ORDER BY created_at DESC")->fetchAll(),
     ];
 
     $credentials = $db->query("SELECT * FROM valid_credentials ORDER BY created_at DESC")->fetchAll();

@@ -15,7 +15,8 @@ $action = $input['action'] ?? '';
 $table_map = [
     'contact' => 'contact_submissions',
     'membership' => 'membership_submissions',
-    'workshop' => 'workshop_submissions'
+    'workshop' => 'workshop_submissions',
+    'collaboration' => 'collaboration_submissions'
 ];
 
 try {
@@ -38,6 +39,14 @@ try {
     elseif ($action === 'delete_cred') {
         $stmt = $db->prepare("DELETE FROM valid_credentials WHERE id = ?");
         $stmt->execute([$input['id']]);
+    }
+    elseif ($action === 'add_credential') {
+        $stmt = $db->prepare("INSERT INTO valid_credentials (name, credential_id, type, status) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$input['name'], $input['credential_id'], $input['type'], $input['status']]);
+    }
+    elseif ($action === 'toggle_cred_status') {
+        $stmt = $db->prepare("UPDATE valid_credentials SET status = ? WHERE id = ?");
+        $stmt->execute([$input['status'], $input['id']]);
     }
     
     echo json_encode(['success' => true]);

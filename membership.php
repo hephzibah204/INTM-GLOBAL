@@ -10,49 +10,50 @@ require_once __DIR__ . '/includes/header.php';
 </div>
 
 <section id="tiers">
-  <div class="tier-grid">
-    <div class="tier-card reveal">
-      <div class="tier-header">
-        <h3>Associate</h3>
-        <p>Entry-level membership for students and newly qualified practitioners.</p>
-      </div>
-      <ul class="tier-features">
-        <li>Access to monthly webinars</li>
-        <li>Quarterly newsletter</li>
-        <li>10% discount on workshops</li>
-        <li>Online member directory</li>
+  <div class="membership-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; padding: 60px 5%;">
+    <!-- Associate -->
+    <div class="mem-card reveal" style="border-radius: 12px; padding: 40px 32px; border: 1.5px solid var(--border); background: white; position: relative; overflow: hidden; transition: transform .25s, box-shadow .25s;">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 8px;">Associate</h3>
+      <div class="mem-price" style="font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 700; color: var(--sage-dark); line-height: 1; margin: 20px 0 4px;">₦50,000</div>
+      <div class="mem-period" style="font-size: 13px; color: var(--soft); margin-bottom: 28px;">Per Year</div>
+      <ul class="mem-features" style="list-style: none; margin-bottom: 32px;">
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Access to monthly webinars</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Quarterly newsletter</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">10% discount on workshops</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Online member directory</li>
       </ul>
-      <button class="btn-primary" onclick="openModal('Associate')">Apply Now</button>
+      <button class="mem-btn mem-btn-outline" onclick="openModal('Associate')" style="display: block; text-align: center; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; transition: .2s; border: 1.5px solid var(--sage); color: var(--sage); background: none; width: 100%; cursor: pointer;">Apply Now</button>
     </div>
     
-    <div class="tier-card featured reveal">
-      <div class="tier-header">
-        <h3>Full Member</h3>
-        <p>For established practitioners with verified credentials and experience.</p>
-      </div>
-      <ul class="tier-features">
-        <li>All Associate benefits</li>
-        <li>Voting rights in AGMs</li>
-        <li>Post-nominal title (MINTM)</li>
-        <li>Professional Indemnity access</li>
-        <li>20% discount on all courses</li>
+    <!-- Full Member -->
+    <div class="mem-card featured reveal" style="border-radius: 12px; padding: 40px 32px; border: 1.5px solid var(--sage-dark); background: var(--sage-dark); color: white; position: relative; overflow: hidden; transition: transform .25s, box-shadow .25s;">
+      <div class="mem-badge" style="position: absolute; top: 20px; right: 20px; background: var(--earth); color: white; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 50px; font-weight: 500;">Most Popular</div>
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 8px;">Full Member</h3>
+      <div class="mem-price" style="font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 700; color: var(--earth-light); line-height: 1; margin: 20px 0 4px;">₦120,000</div>
+      <div class="mem-period" style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 28px;">Per Year</div>
+      <ul class="mem-features" style="list-style: none; margin-bottom: 32px;">
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);">All Associate benefits</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);">Voting rights in AGMs</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);">Post-nominal title (MINTM)</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);">Professional Indemnity access</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);">20% discount on all courses</li>
       </ul>
-      <button class="btn-primary" onclick="openModal('Full Member')">Apply Now</button>
+      <button class="mem-btn mem-btn-solid" onclick="openModal('Full Member')" style="display: block; text-align: center; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; transition: .2s; background: var(--earth); color: white; border: none; width: 100%; cursor: pointer;">Apply Now</button>
     </div>
 
-    <div class="tier-card reveal">
-      <div class="tier-header">
-        <h3>Fellow</h3>
-        <p>By invitation or application for distinguished contribution to the field.</p>
-      </div>
-      <ul class="tier-features">
-        <li>All Full Member benefits</li>
-        <li>FINTM title designation</li>
-        <li>Research grant eligibility</li>
-        <li>Mentorship opportunities</li>
-        <li>Advisory board eligibility</li>
+    <!-- Fellow -->
+    <div class="mem-card reveal" style="border-radius: 12px; padding: 40px 32px; border: 1.5px solid var(--border); background: white; position: relative; overflow: hidden; transition: transform .25s, box-shadow .25s;">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 8px;">Fellow</h3>
+      <div class="mem-price" style="font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 700; color: var(--sage-dark); line-height: 1; margin: 20px 0 4px;">₦250,000</div>
+      <div class="mem-period" style="font-size: 13px; color: var(--soft); margin-bottom: 28px;">Per Year</div>
+      <ul class="mem-features" style="list-style: none; margin-bottom: 32px;">
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">All Full Member benefits</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">FINTM title designation</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Research grant eligibility</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Mentorship opportunities</li>
+        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--mid);">Advisory board eligibility</li>
       </ul>
-      <button class="btn-primary" onclick="openModal('Fellow')">Apply Now</button>
+      <button class="mem-btn mem-btn-outline" onclick="openModal('Fellow')" style="display: block; text-align: center; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; transition: .2s; border: 1.5px solid var(--sage); color: var(--sage); background: none; width: 100%; cursor: pointer;">Apply Now</button>
     </div>
   </div>
 </section>

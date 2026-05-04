@@ -110,6 +110,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <div class="menu-item active" onclick="switchView('dashboard', this)">📊 Dashboard</div>
             <div class="menu-item" onclick="switchView('membership', this)">🎓 Membership</div>
             <div class="menu-item" onclick="switchView('workshop', this)">📅 Workshops</div>
+            <div class="menu-item" onclick="switchView('collaboration', this)">🤝 Collaborations</div>
             <div class="menu-item" onclick="switchView('contact', this)">✉️ Messages</div>
             <div class="menu-item" onclick="switchView('credentials', this)">🛡️ Credentials</div>
             <div class="menu-item" onclick="switchView('content', this)">📝 Content CMS</div>
@@ -159,6 +160,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
         <div id="view-contact" class="view-section">
             <div class="table-container" id="contact-table"></div>
         </div>
+        <div id="view-collaboration" class="view-section">
+            <div class="table-container" id="collaboration-table"></div>
+        </div>
         
         <!-- CREDENTIALS VIEW -->
         <div id="view-credentials" class="view-section">
@@ -193,6 +197,40 @@ if (!isset($_SESSION['admin_logged_in'])) {
         </div>
     </div>
 
+    <!-- ADD CREDENTIAL MODAL -->
+    <div id="credModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; padding: 15px;">
+        <div class="content" style="background:white; width:100%; max-width:450px; border-radius:12px; padding:25px; position:relative;">
+            <span class="close-btn" onclick="closeCredModal()" style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:24px;">&times;</span>
+            <h2 style="margin-bottom:20px; color:var(--primary);">Add New Credential</h2>
+            <form id="addCredForm">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Full Name</label>
+                    <input type="text" name="name" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Credential ID</label>
+                    <input type="text" name="credential_id" placeholder="e.g. INTM-CERT-2025-001" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Type</label>
+                    <select name="type" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                        <option value="Certificate">Certificate</option>
+                        <option value="Membership">Membership</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Initial Status</label>
+                    <select name="status" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                        <option value="Active">Active</option>
+                        <option value="Revoked">Revoked</option>
+                        <option value="Expired">Expired</option>
+                    </select>
+                </div>
+                <button type="submit" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Save Credential</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         let currentData = {};
         
@@ -209,19 +247,19 @@ if (!isset($_SESSION['admin_logged_in'])) {
             document.getElementById('stats-summary').innerHTML = `
                 <div class="stat-card"><h3>Memberships</h3><div class="val">${stats.membership.total}</div></div>
                 <div class="stat-card"><h3>Workshops</h3><div class="val">${stats.workshop.total}</div></div>
-                <div class="stat-card"><h3>Messages</h3><div class="val">${stats.contact.total}</div></div>
+                <div class="stat-card"><h3>Partnerships</h3><div class="val">${stats.collaboration.total}</div></div>
                 <div class="stat-card"><h3>New Alerts</h3><div class="val" style="color:var(--accent)">${stats.all_new}</div></div>
             `;
         }
 
         function renderTables() {
-            ['membership', 'workshop', 'contact'].forEach(type => {
+            ['membership', 'workshop', 'contact', 'collaboration'].forEach(type => {
                 const list = currentData.submissions[type];
-                let html = `<table><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
+                let html = `<table><thead><tr><th>${type === 'collaboration' ? 'Organisation' : 'Name'}</th><th>Email</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
                 list.forEach(r => {
                     html += `
                         <tr>
-                            <td>${r.name || r.organisation}</td>
+                            <td>${r.name || r.organisation || r.contact_name}</td>
                             <td>${r.email}</td>
                             <td><span class="badge badge-${r.status}">${r.status}</span></td>
                             <td>${r.created_at.split(' ')[0]}</td>
@@ -329,6 +367,30 @@ if (!isset($_SESSION['admin_logged_in'])) {
             });
             loadData();
         }
+
+        function openAddCredential() {
+            document.getElementById('credModal').style.display = 'flex';
+        }
+
+        function closeCredModal() {
+            document.getElementById('credModal').style.display = 'none';
+        }
+
+        document.getElementById('addCredForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.action = 'add_credential';
+
+            await fetch('api/admin_actions.php', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            closeCredModal();
+            e.target.reset();
+            loadData();
+        };
 
         window.onload = loadData;
     </script>
