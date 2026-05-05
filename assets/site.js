@@ -285,6 +285,50 @@
     });
   }
 
+  const coursesSection = document.getElementById('courses');
+  if (coursesSection && coursesSection.querySelector('.curricula-layout')) {
+    const filterButtons = Array.from(coursesSection.querySelectorAll('[data-course-filter]'));
+    const courseSections = Array.from(coursesSection.querySelectorAll('.course-section'));
+    const sidebarLinks = Array.from(coursesSection.querySelectorAll('.course-nav-item a'));
+
+    const applyCourseFilter = (cat) => {
+      courseSections.forEach((sec) => {
+        if (cat === 'all') {
+          sec.style.display = '';
+          return;
+        }
+        const cats = (sec.getAttribute('data-category') || '').split(/\s+/).filter(Boolean);
+        sec.style.display = cats.includes(cat) ? '' : 'none';
+      });
+    };
+
+    if (filterButtons.length) {
+      filterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          applyCourseFilter(btn.getAttribute('data-course-filter') || 'all');
+        });
+      });
+    }
+
+    if (sidebarLinks.length && courseSections.length && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            sidebarLinks.forEach((a) => {
+              a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+            });
+          });
+        },
+        { threshold: 0.25, rootMargin: '-160px 0px -60% 0px' }
+      );
+      courseSections.forEach((s) => observer.observe(s));
+    }
+  }
+
   const tabButtons = document.querySelectorAll('[data-tab]');
   const certificateTab = document.getElementById('certificate-tab');
   const membershipTab = document.getElementById('membership-tab');
