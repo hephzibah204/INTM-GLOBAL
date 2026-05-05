@@ -442,6 +442,246 @@ h2 em { color: var(--sage); font-style: italic; }
   padding: 4px 12px; font-size: 11px; font-weight: 500;
 }
 
+.course-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.course-filter-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--mid);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+}
+
+.course-filter-btn:hover { border-color: rgba(90,122,94,0.35); color: var(--sage-dark); }
+.course-filter-btn.active { background: var(--sage-dark); border-color: var(--sage-dark); color: white; }
+
+.curricula-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.curricula-sidebar { position: sticky; top: 124px; }
+
+.curricula-sidebar-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.curricula-sidebar-header {
+  background: var(--sage-dark);
+  color: white;
+  padding: 18px 18px;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.course-nav-list { list-style: none; padding: 10px 0; }
+
+.course-nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: var(--mid);
+  font-size: 13px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.course-nav-item a:hover {
+  color: var(--sage-dark);
+  background: rgba(90,122,94,0.08);
+  border-left-color: var(--sage);
+}
+
+.course-nav-item a.active {
+  color: var(--sage-dark);
+  background: rgba(90,122,94,0.08);
+  border-left-color: var(--sage-dark);
+}
+
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
+
+.curricula-sidebar-enrol {
+  display: block;
+  margin: 14px 14px 18px;
+  text-align: center;
+  background: var(--earth);
+  color: white;
+  text-decoration: none;
+  padding: 12px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform .2s, background .2s;
+}
+
+.curricula-sidebar-enrol:hover { background: var(--earth-light); transform: translateY(-1px); }
+
+.courses-area { display: flex; flex-direction: column; gap: 24px; }
+
+.course-section {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 34px var(--shadow);
+  scroll-margin-top: 128px;
+}
+
+.course-header {
+  background: linear-gradient(135deg, var(--sage-dark), #2f4e33);
+  color: white;
+  padding: 22px 26px;
+}
+
+.course-number {
+  font-size: 11px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 8px;
+}
+
+.course-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.course-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.badge-gold { background: rgba(181,135,74,0.25); border: 1px solid rgba(181,135,74,0.35); color: rgba(255,255,255,0.9); }
+.badge-white { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); }
+
+.course-body { padding: 26px; }
+
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+
+.info-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.info-label {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--sage);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.info-value { font-size: 13px; color: var(--charcoal); line-height: 1.5; }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sage-dark);
+  margin: 18px 0 10px;
+}
+
+.overview-text { font-size: 14px; color: var(--mid); line-height: 1.8; }
+
+.objectives-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+
+.objective-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.55;
+}
+
+.obj-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.obj-icon svg { width: 14px; height: 14px; fill: white; }
+
+.curriculum-wrap { overflow: hidden; border: 1px solid var(--border); border-radius: 12px; margin-top: 10px; }
+
+.curriculum-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.curriculum-table thead { background: rgba(58,90,62,0.95); color: white; }
+.curriculum-table th { text-align: left; padding: 12px 14px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; }
+.curriculum-table td { padding: 12px 14px; border-top: 1px solid var(--border); vertical-align: top; color: var(--mid); }
+.curriculum-table td:first-child { width: 70px; text-align: center; color: var(--sage-dark); font-weight: 700; background: rgba(90,122,94,0.08); }
+.curriculum-table td:nth-child(2) { color: var(--charcoal); font-weight: 600; }
+
+.assessment-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+
+.assessment-item {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--mid);
+}
+
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+.cta-bar {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(90,122,94,0.06);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.cta-text { color: var(--mid); font-size: 14px; line-height: 1.6; }
+.cta-text strong { display: block; color: var(--sage-dark); }
+.cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
 /* ─── MEMBERSHIP ─── */
 #membership { background: var(--cream); }
 
@@ -535,6 +775,34 @@ h2 em { color: var(--sage); font-style: italic; }
 .partner-logos {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
 }
+
+.collab-aside { display: flex; flex-direction: column; gap: 18px; }
+
+.partner-snippets h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 10px;
+}
+
+.partner-snippet-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px;
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.partner-snippet-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sage-dark);
+  margin-bottom: 10px;
+}
+
+.partner-snippet-card p { color: var(--mid); font-size: 14px; line-height: 1.8; margin-top: 10px; }
 .partner-logo-card {
   background: white; border: 1px solid var(--border);
   border-radius: 10px; padding: 28px 20px;
@@ -810,6 +1078,10 @@ footer {
 
 @media (max-width: 1024px) {
   .course-grid, .project-grid, .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .curricula-layout { grid-template-columns: 1fr; }
+  .curricula-sidebar { position: static; }
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
+  .objectives-grid { grid-template-columns: 1fr; }
   .about-strip { grid-template-columns: 1fr; gap: 40px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
 }
@@ -827,6 +1099,10 @@ footer {
   .stat-num { font-size: 2.2rem; }
 
   .course-grid, .project-grid, .membership-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .curriculum-table th:nth-child(3),
+  .curriculum-table td:nth-child(3) { display: none; }
+  .cta-bar { padding: 14px 14px; }
   .team-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
   .collab-layout, .projects-intro { grid-template-columns: 1fr; gap: 40px; }
   .partner-logos { grid-template-columns: 1fr !important; gap: 20px !important; }
