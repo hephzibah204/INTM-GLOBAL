@@ -1,0 +1,9 @@
+AddDefaultCharset UTF-8
+
+AddCharset UTF-8 .html
+AddCharset UTF-8 .css
+AddCharset UTF-8 .js
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>
