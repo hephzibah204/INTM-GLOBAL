@@ -52,7 +52,11 @@ try {
         'submissions' => $submissions,
         'credentials' => $credentials,
         'content' => $content,
-        'prefix_defaults' => $prefix_defaults
+        'prefix_defaults' => $prefix_defaults,
+        'db' => [
+            'file' => basename($db_path),
+            'credentials_total' => (int)$db->query("SELECT COUNT(*) FROM valid_credentials")->fetchColumn()
+        ]
     ]);
 } catch (PDOException $e) {
     http_response_code(500);

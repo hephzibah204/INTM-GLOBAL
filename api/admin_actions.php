@@ -137,7 +137,20 @@ try {
             $db->commit();
         }
 
-        echo json_encode(['success' => true, 'credential_id' => $credential_id]);
+        $check = $db->prepare("SELECT id FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");
+        $check->execute([$credential_id]);
+        $new_id = $check->fetchColumn();
+        if (!$new_id) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Credential save failed. Please try again.']);
+            exit;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'credential_id' => $credential_id,
+            'db_file' => basename($db_path)
+        ]);
         exit;
     }
     elseif ($action === 'toggle_cred_status') {

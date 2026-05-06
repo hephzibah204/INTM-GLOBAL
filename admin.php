@@ -228,8 +228,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
     </div>
 
     <!-- ADD CREDENTIAL MODAL -->
-    <div id="credModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; padding: 15px;">
-        <div class="content" style="background:white; width:100%; max-width:450px; border-radius:12px; padding:25px; position:relative;">
+    <div id="credModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; padding: 12px;">
+        <div class="content" style="background:white; width:100%; max-width:420px; max-height:88vh; overflow:auto; border-radius:12px; padding:18px; position:relative;">
             <span class="close-btn" onclick="closeCredModal()" style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:24px;">&times;</span>
             <h2 style="margin-bottom:20px; color:var(--primary);">Add New Credential</h2>
             <form id="addCredForm">
@@ -309,6 +309,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 const prefixMem = document.getElementById('prefixMem');
                 if (prefixCert) prefixCert.value = prefixDefaults.certificate;
                 if (prefixMem) prefixMem.value = prefixDefaults.membership;
+
+                const prefixSaveMsg = document.getElementById('prefixSaveMsg');
+                if (prefixSaveMsg && currentData.db && currentData.db.file) {
+                    prefixSaveMsg.style.display = 'block';
+                    prefixSaveMsg.textContent = `DB: ${currentData.db.file} · Credentials: ${currentData.db.credentials_total}`;
+                }
 
                 renderStats();
                 renderTables();
@@ -532,12 +538,15 @@ if (!isset($_SESSION['admin_logged_in'])) {
             }
 
             if (json && json.credential_id) {
-                alert(`Credential created: ${json.credential_id}`);
+                const dbFile = json.db_file ? `\nDB: ${json.db_file}` : '';
+                alert(`Credential created: ${json.credential_id}${dbFile}`);
             }
 
             closeCredModal();
             e.target.reset();
-            loadData();
+            await loadData();
+            const credsBtn = document.querySelector('.menu-item[onclick*="credentials"]');
+            if (credsBtn) switchView('credentials', credsBtn);
         };
 
         function updateCredPreview() {
