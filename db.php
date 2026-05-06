@@ -86,8 +86,20 @@ try {
         name TEXT NOT NULL,
         credential_id TEXT NOT NULL UNIQUE,
         type TEXT NOT NULL,
+        prefix TEXT,
+        seq INTEGER,
+        issued_date TEXT,
+        issued_year INTEGER,
+        qualification TEXT,
+        grade TEXT,
         status TEXT DEFAULT 'Active',
         created_at TEXT DEFAULT (datetime('now'))
+    )");
+
+    $db->exec("CREATE TABLE IF NOT EXISTS app_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now'))
     )");
 
     $db->exec("CREATE TABLE IF NOT EXISTS site_content (
@@ -128,6 +140,13 @@ try {
     $ensure_column('trainer_submissions', 'status', "TEXT DEFAULT 'new'");
     $ensure_column('trainer_submissions', 'created_at', "TEXT DEFAULT (datetime('now'))");
 
+    $ensure_column('valid_credentials', 'prefix', 'TEXT');
+    $ensure_column('valid_credentials', 'seq', 'INTEGER');
+    $ensure_column('valid_credentials', 'issued_date', 'TEXT');
+    $ensure_column('valid_credentials', 'issued_year', 'INTEGER');
+    $ensure_column('valid_credentials', 'qualification', 'TEXT');
+    $ensure_column('valid_credentials', 'grade', 'TEXT');
+
 } catch (Throwable $e) {
     $db = null;
     $db_error = $e->getMessage();
@@ -150,6 +169,7 @@ function get_page_content($page_id) {
 }
 
 // Global configuration
-$admin_user = "admin";
-$admin_pass = "intm@2025";
+$cfg = require __DIR__ . '/config.php';
+$admin_user = (string)($cfg['admin_user'] ?? 'admin');
+$admin_pass = (string)($cfg['admin_pass'] ?? 'intm@2025');
 ?>

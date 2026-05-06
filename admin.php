@@ -11,9 +11,9 @@ if (!$db) {
 // Simple Login Check
 if (!isset($_SESSION['admin_logged_in'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $u = $_POST['username'] ?? '';
-        $p = $_POST['password'] ?? '';
-        if ($u === $admin_user && $p === $admin_pass) {
+        $u = trim((string)($_POST['username'] ?? ''));
+        $p = trim((string)($_POST['password'] ?? ''));
+        if (hash_equals((string)$admin_user, $u) && hash_equals((string)$admin_pass, $p)) {
             $_SESSION['admin_logged_in'] = true;
             header("Location: admin.php");
             exit;
@@ -75,7 +75,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         
         .mobile-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); padding: 5px; }
         
-        .view-section { padding: 25px; }
+        .view-section { padding: 25px; display: none; }
         .view-section.active { display: block; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
@@ -180,6 +180,26 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <h3>Professional Registry</h3>
                 <button class="btn-primary" onclick="openAddCredential()" style="padding:8px 16px; background:var(--primary); color:white; border:none; border-radius:6px; cursor:pointer;">+ Add Credential</button>
             </div>
+            <div style="background:white; padding:18px; border-radius:12px; border:1px solid var(--border); margin-bottom:16px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                    <div>
+                        <div style="font-weight:700; color:var(--primary);">Prefix Defaults</div>
+                        <div style="font-size:13px; color:#666; margin-top:4px;">Set default prefixes used for automatic credential numbering (prefix-year-sequence).</div>
+                    </div>
+                    <button class="btn-action" id="savePrefixDefaultsBtn" style="padding:8px 14px;">Save Prefixes</button>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top:14px;">
+                    <div>
+                        <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Certificate Prefix</label>
+                        <input type="text" id="prefixCert" placeholder="e.g. INTM-CERT" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Membership Prefix</label>
+                        <input type="text" id="prefixMem" placeholder="e.g. INTM-MEM" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                    </div>
+                </div>
+                <div id="prefixSaveMsg" style="font-size:13px; color:#666; margin-top:10px; display:none;"></div>
+            </div>
             <div id="credentials-table"></div>
         </div>
 
@@ -214,12 +234,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <h2 style="margin-bottom:20px; color:var(--primary);">Add New Credential</h2>
             <form id="addCredForm">
                 <div style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Full Name</label>
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Name (Required)</label>
                     <input type="text" name="name" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Credential ID</label>
-                    <input type="text" name="credential_id" placeholder="e.g. INTM-CERT-2025-001" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
                 </div>
                 <div style="margin-bottom:15px;">
                     <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Type</label>
@@ -227,6 +243,27 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <option value="Certificate">Certificate</option>
                         <option value="Membership">Membership</option>
                     </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Date Issued (Required)</label>
+                    <input type="date" name="issued_date" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Qualification Type</label>
+                    <input type="text" name="qualification" placeholder="e.g. Diploma in Nutritional Therapy – Level 1" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Grade</label>
+                    <input type="text" name="grade" placeholder="e.g. Distinction" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <div style="font-size:12px; color:#666; margin-bottom:6px;">Credential ID</div>
+                    <div id="credPreview" style="background:#f8f9fa; border:1px solid #e1e4e8; border-radius:8px; padding:10px 12px; font-size:13px; color:#333;">Will generate after save</div>
+                    <div style="font-size:12px; color:#777; margin-top:6px;">Only Name and Date Issued are required. ID numbering is automatic.</div>
                 </div>
                 <div style="margin-bottom:20px;">
                     <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Initial Status</label>
@@ -244,13 +281,41 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
     <script>
         let currentData = {};
+        let prefixDefaults = { certificate: 'INTM-CERT', membership: 'INTM-MEM' };
         
         async function loadData() {
-            const res = await fetch('api/admin_data.php');
-            currentData = await res.json();
-            renderStats();
-            renderTables();
-            renderCMS();
+            try {
+                const res = await fetch('api/admin_data.php', { cache: 'no-store' });
+                if (res.status === 401) {
+                    window.location.href = 'admin.php';
+                    return;
+                }
+                const json = await res.json().catch(() => null);
+                if (!res.ok) {
+                    const msg = (json && json.error) || 'Failed to load admin data.';
+                    document.getElementById('stats-summary').innerHTML = `<div style="background:white; border:1px solid var(--border); border-radius:12px; padding:18px; color:#666;">${msg}</div>`;
+                    return;
+                }
+
+                currentData = json || {};
+                if (currentData.prefix_defaults) {
+                    prefixDefaults = {
+                        certificate: String(currentData.prefix_defaults.certificate || 'INTM-CERT').toUpperCase(),
+                        membership: String(currentData.prefix_defaults.membership || 'INTM-MEM').toUpperCase()
+                    };
+                }
+
+                const prefixCert = document.getElementById('prefixCert');
+                const prefixMem = document.getElementById('prefixMem');
+                if (prefixCert) prefixCert.value = prefixDefaults.certificate;
+                if (prefixMem) prefixMem.value = prefixDefaults.membership;
+
+                renderStats();
+                renderTables();
+                renderCMS();
+            } catch (e) {
+                document.getElementById('stats-summary').innerHTML = `<div style="background:white; border:1px solid var(--border); border-radius:12px; padding:18px; color:#666;">Network error while loading admin data.</div>`;
+            }
         }
 
         function renderStats() {
@@ -369,10 +434,20 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
         function switchView(view, btn) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-' + view).classList.add('active');
+            const section = document.getElementById('view-' + view);
+            if (!section) {
+                alert('This section is not available.');
+                return;
+            }
+            section.classList.add('active');
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('view-title').innerText = view.charAt(0).toUpperCase() + view.slice(1) + (view === 'dashboard' ? ' Overview' : '');
+
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('open') && typeof toggleSidebar === 'function') {
+                toggleSidebar();
+            }
         }
 
         async function saveCMS() {
@@ -425,6 +500,13 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
         function openAddCredential() {
             document.getElementById('credModal').style.display = 'flex';
+            const form = document.getElementById('addCredForm');
+            const typeEl = form?.querySelector('[name="type"]');
+            const prefixEl = form?.querySelector('[name="prefix"]');
+            if (typeEl && prefixEl && (prefixEl.value || '').trim() === '') {
+                prefixEl.value = (typeEl.value === 'Membership' ? prefixDefaults.membership : prefixDefaults.certificate);
+            }
+            updateCredPreview();
         }
 
         function closeCredModal() {
@@ -449,10 +531,87 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 return;
             }
 
+            if (json && json.credential_id) {
+                alert(`Credential created: ${json.credential_id}`);
+            }
+
             closeCredModal();
             e.target.reset();
             loadData();
         };
+
+        function updateCredPreview() {
+            const form = document.getElementById('addCredForm');
+            const preview = document.getElementById('credPreview');
+            if (!form || !preview) return;
+
+            const type = (form.querySelector('[name="type"]')?.value || 'Certificate').trim();
+            const issuedDate = (form.querySelector('[name="issued_date"]')?.value || '').trim();
+
+            const defaultPrefix = type === 'Membership' ? prefixDefaults.membership : prefixDefaults.certificate;
+            const prefix = defaultPrefix.toUpperCase();
+            const year = issuedDate ? issuedDate.slice(0, 4) : 'YYYY';
+            preview.textContent = `${prefix}-${year}-####`;
+        }
+
+        (function wireCredPreview() {
+            const form = document.getElementById('addCredForm');
+            if (!form) return;
+            const typeEl = form.querySelector('[name="type"]');
+            const dateEl = form.querySelector('[name="issued_date"]');
+
+            if (typeEl) typeEl.addEventListener('change', updateCredPreview);
+            if (dateEl) dateEl.addEventListener('change', updateCredPreview);
+        })();
+
+        (function wirePrefixDefaults() {
+            const btn = document.getElementById('savePrefixDefaultsBtn');
+            const certEl = document.getElementById('prefixCert');
+            const memEl = document.getElementById('prefixMem');
+            const msg = document.getElementById('prefixSaveMsg');
+            if (!btn || !certEl || !memEl) return;
+
+            const setMsg = (text) => {
+                if (!msg) return;
+                msg.textContent = text;
+                msg.style.display = 'block';
+            };
+
+            btn.addEventListener('click', async () => {
+                const cert = String(certEl.value || '').trim().toUpperCase();
+                const mem = String(memEl.value || '').trim().toUpperCase();
+                if (!cert || !mem) {
+                    setMsg('Both Certificate and Membership prefixes are required.');
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                setMsg('Saving…');
+
+                try {
+                    const res = await fetch('api/admin_actions.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'set_prefix_defaults', certificate_prefix: cert, membership_prefix: mem })
+                    });
+                    const json = await res.json().catch(() => null);
+                    if (!res.ok) {
+                        setMsg((json && json.error) || 'Failed to save prefixes.');
+                        return;
+                    }
+
+                    prefixDefaults = { certificate: cert, membership: mem };
+                    setMsg('Saved. New defaults will be used for new credentials.');
+                    updateCredPreview();
+                } catch (_) {
+                    setMsg('Network error while saving prefixes.');
+                } finally {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+            });
+        })();
 
         window.onload = loadData;
     </script>

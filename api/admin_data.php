@@ -37,11 +37,22 @@ try {
     $credentials = $db->query("SELECT * FROM valid_credentials ORDER BY created_at DESC")->fetchAll();
     $content = $db->query("SELECT * FROM site_content ORDER BY page_id, section_id")->fetchAll();
 
+    $prefix_defaults = [
+        'certificate' => 'INTM-CERT',
+        'membership' => 'INTM-MEM'
+    ];
+    $rows = $db->query("SELECT key, value FROM app_settings WHERE key IN ('prefix_certificate','prefix_membership')")->fetchAll();
+    foreach ($rows as $r) {
+        if (($r['key'] ?? '') === 'prefix_certificate') $prefix_defaults['certificate'] = (string)$r['value'];
+        if (($r['key'] ?? '') === 'prefix_membership') $prefix_defaults['membership'] = (string)$r['value'];
+    }
+
     echo json_encode([
         'stats' => $stats,
         'submissions' => $submissions,
         'credentials' => $credentials,
-        'content' => $content
+        'content' => $content,
+        'prefix_defaults' => $prefix_defaults
     ]);
 } catch (PDOException $e) {
     http_response_code(500);
