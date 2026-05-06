@@ -7,3 +7,5 @@ AddCharset UTF-8 .js
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
 </IfModule>
+
+RedirectMatch 302 ^/e-learning$ /e-learning/
