@@ -2,7 +2,14 @@
 session_start();
 require_once __DIR__ . '/../db.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+
+if (!$db) {
+    http_response_code(500);
+    echo json_encode(['error' => $db_error ?: 'Database unavailable']);
+    exit;
+}
 
 if (!isset($_SESSION['admin_logged_in'])) {
     http_response_code(401);
@@ -16,7 +23,8 @@ $table_map = [
     'contact' => 'contact_submissions',
     'membership' => 'membership_submissions',
     'workshop' => 'workshop_submissions',
-    'collaboration' => 'collaboration_submissions'
+    'collaboration' => 'collaboration_submissions',
+    'trainer' => 'trainer_submissions'
 ];
 
 try {
@@ -41,8 +49,28 @@ try {
         $stmt->execute([$input['id']]);
     }
     elseif ($action === 'add_credential') {
+        $name = trim((string)($input['name'] ?? ''));
+        $credential_id = strtoupper(trim((string)($input['credential_id'] ?? '')));
+        $type_in = trim((string)($input['type'] ?? ''));
+        $status_in = trim((string)($input['status'] ?? 'Active'));
+
+        $type_key = strtolower($type_in);
+        $type_map = [
+            'certificate' => 'Certificate',
+            'cert' => 'Certificate',
+            'membership' => 'Membership',
+            'member' => 'Membership'
+        ];
+        $type = $type_map[$type_key] ?? $type_in;
+
+        if ($name === '' || $credential_id === '' || $type === '') {
+            http_response_code(400);
+            echo json_encode(['error' => 'Name, Credential ID and Type are required']);
+            exit;
+        }
+
         $stmt = $db->prepare("INSERT INTO valid_credentials (name, credential_id, type, status) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$input['name'], $input['credential_id'], $input['type'], $input['status']]);
+        $stmt->execute([$name, $credential_id, $type, $status_in ?: 'Active']);
     }
     elseif ($action === 'toggle_cred_status') {
         $stmt = $db->prepare("UPDATE valid_credentials SET status = ? WHERE id = ?");

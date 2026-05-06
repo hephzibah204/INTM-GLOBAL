@@ -285,6 +285,79 @@
     });
   }
 
+  const trainerSchemeButtons = Array.from(document.querySelectorAll('[data-trainer-scheme]'));
+  const trainerForms = Array.from(document.querySelectorAll('form[data-trainer-form]'));
+
+  const findTrainerFormByTarget = (target) => {
+    if (!target) return null;
+    const el = document.querySelector(target);
+    if (!el) return null;
+    return el.querySelector('form[data-trainer-form]');
+  };
+
+  if (trainerSchemeButtons.length) {
+    trainerSchemeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const scheme = btn.getAttribute('data-trainer-scheme') || '';
+        const target = btn.getAttribute('data-trainer-target') || '';
+        const form = findTrainerFormByTarget(target);
+        if (form) {
+          const schemeInput = form.querySelector('input[name="scheme"]');
+          if (schemeInput) schemeInput.value = scheme;
+        }
+        if (target) {
+          const t = document.querySelector(target);
+          if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  }
+
+  if (trainerForms.length) {
+    const schemeParam = getUrlParam('scheme');
+    if (schemeParam) {
+      trainerForms.forEach((f) => {
+        const schemeInput = f.querySelector('input[name="scheme"]');
+        if (schemeInput) schemeInput.value = schemeParam;
+      });
+    }
+
+    trainerForms.forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const msgBox = form.querySelector('.trainer-form-message');
+
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Submitting...';
+        }
+
+        try {
+          const formData = new FormData(form);
+          const res = await fetch('./api/submit_trainer.php', { method: 'POST', body: formData });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok) {
+            setBoxMessage(msgBox, true, 'Application received! We will review your submission and contact you shortly.');
+            const schemeValue = formData.get('scheme');
+            form.reset();
+            const schemeInput = form.querySelector('input[name="scheme"]');
+            if (schemeInput && schemeValue) schemeInput.value = String(schemeValue);
+          } else {
+            setBoxMessage(msgBox, false, data.error || 'Submission failed.');
+          }
+        } catch (_) {
+          setBoxMessage(msgBox, false, 'Connection error. Please try again.');
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Submit Application';
+          }
+        }
+      });
+    });
+  }
+
   const coursesSection = document.getElementById('courses');
   if (coursesSection && coursesSection.querySelector('.curricula-layout')) {
     const filterButtons = Array.from(coursesSection.querySelectorAll('[data-course-filter]'));

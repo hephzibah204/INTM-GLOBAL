@@ -2,6 +2,12 @@
 session_start();
 require_once __DIR__ . '/db.php';
 
+if (!$db) {
+    http_response_code(500);
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Error | INTM Global</title><style>body{font-family:DM Sans, sans-serif;background:#f8f9fa;margin:0;padding:40px;color:#2c2c2c} .card{max-width:760px;margin:0 auto;background:white;border:1px solid #eee;border-radius:12px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,0.06)} h1{margin:0 0 10px;font-size:22px} p{margin:10px 0;line-height:1.6} code{background:#f1f3f5;padding:2px 6px;border-radius:6px} .hint{color:#555}</style></head><body><div class="card"><h1>Database unavailable</h1><p class="hint">The admin dashboard requires SQLite support on the server. Your hosting environment appears to be missing it or cannot write to the database file.</p><p><strong>Server message:</strong> <code>' . htmlspecialchars($db_error ?: 'Unknown error', ENT_QUOTES) . '</code></p><p class="hint">On cPanel, enable <code>PDO_SQLITE</code>/<code>sqlite3</code> (if available) or migrate to MySQL.</p></div></body></html>';
+    exit;
+}
+
 // Simple Login Check
 if (!isset($_SESSION['admin_logged_in'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -109,6 +115,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         <div class="sidebar-menu">
             <div class="menu-item active" onclick="switchView('dashboard', this)">📊 Dashboard</div>
             <div class="menu-item" onclick="switchView('membership', this)">🎓 Membership</div>
+            <div class="menu-item" onclick="switchView('trainer', this)">🧑‍🏫 Trainers</div>
             <div class="menu-item" onclick="switchView('workshop', this)">📅 Workshops</div>
             <div class="menu-item" onclick="switchView('collaboration', this)">🤝 Collaborations</div>
             <div class="menu-item" onclick="switchView('contact', this)">✉️ Messages</div>
@@ -153,6 +160,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
         <!-- LIST VIEWS (Generic Container) -->
         <div id="view-membership" class="view-section">
             <div class="table-container" id="membership-table"></div>
+        </div>
+        <div id="view-trainer" class="view-section">
+            <div class="table-container" id="trainer-table"></div>
         </div>
         <div id="view-workshop" class="view-section">
             <div class="table-container" id="workshop-table"></div>
@@ -247,6 +257,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
             const stats = currentData.stats;
             document.getElementById('stats-summary').innerHTML = `
                 <div class="stat-card"><h3>Memberships</h3><div class="val">${stats.membership.total}</div></div>
+                <div class="stat-card"><h3>Trainer Applications</h3><div class="val">${stats.trainer.total}</div></div>
                 <div class="stat-card"><h3>Workshops</h3><div class="val">${stats.workshop.total}</div></div>
                 <div class="stat-card"><h3>Partnerships</h3><div class="val">${stats.collaboration.total}</div></div>
                 <div class="stat-card"><h3>New Alerts</h3><div class="val" style="color:var(--accent)">${stats.all_new}</div></div>
@@ -254,7 +265,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         }
 
         function renderTables() {
-            ['membership', 'workshop', 'contact', 'collaboration'].forEach(type => {
+            ['membership', 'trainer', 'workshop', 'contact', 'collaboration'].forEach(type => {
                 const list = currentData.submissions[type];
                 let html = `<table><thead><tr><th>${type === 'collaboration' ? 'Organisation' : 'Name'}</th><th>Email</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
                 list.forEach(r => {
@@ -324,20 +335,32 @@ if (!isset($_SESSION['admin_logged_in'])) {
         }
 
         async function updateStatus(type, id, status) {
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'status', type, id, status })
             });
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'Update failed.');
+                return;
+            }
             closeDetail();
             loadData();
         }
 
         async function deleteSub(type, id) {
             if(!confirm('Delete this submission?')) return;
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'delete', type, id })
             });
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'Delete failed.');
+                return;
+            }
             closeDetail();
             loadData();
         }
@@ -357,28 +380,46 @@ if (!isset($_SESSION['admin_logged_in'])) {
             document.querySelectorAll('#cms-editor textarea').forEach(ta => {
                 updates.push({ id: ta.dataset.id, content: ta.value });
             });
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'cms', updates })
             });
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'CMS update failed.');
+                return;
+            }
             alert('CMS Updated!');
             loadData();
         }
 
         async function deleteCred(id) {
             if(!confirm('Delete this credential?')) return;
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'delete_cred', id })
             });
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'Delete failed.');
+                return;
+            }
             loadData();
         }
 
         async function updateCredStatus(id, status) {
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'toggle_cred_status', id, status })
             });
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'Update failed.');
+                return;
+            }
             loadData();
         }
 
@@ -396,10 +437,17 @@ if (!isset($_SESSION['admin_logged_in'])) {
             const data = Object.fromEntries(formData.entries());
             data.action = 'add_credential';
 
-            await fetch('api/admin_actions.php', {
+            const res = await fetch('api/admin_actions.php', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
+
+            const json = await res.json().catch(() => null);
+            if (!res.ok) {
+                alert((json && json.error) || 'Add credential failed.');
+                return;
+            }
 
             closeCredModal();
             e.target.reset();

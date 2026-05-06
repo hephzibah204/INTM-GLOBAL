@@ -1,7 +1,14 @@
 <?php
 require_once __DIR__ . '/../db.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+
+if (!$db) {
+    http_response_code(500);
+    echo json_encode(['error' => $db_error ?: 'Database unavailable']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

@@ -1,9 +1,15 @@
 <?php
 // INTM Global – Database Helper (SQLite)
 
+$db = null;
+$db_error = null;
 $db_path = __DIR__ . '/intm_submissions.db';
 
 try {
+    if (!in_array('sqlite', PDO::getAvailableDrivers(), true)) {
+        throw new RuntimeException('SQLite (PDO_SQLITE) is not available on this server.');
+    }
+
     $db = new PDO("sqlite:$db_path");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -58,6 +64,23 @@ try {
         created_at TEXT DEFAULT (datetime('now'))
     )");
 
+    $db->exec("CREATE TABLE IF NOT EXISTS trainer_submissions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        scheme TEXT NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone TEXT,
+        location TEXT,
+        organisation TEXT,
+        qualifications TEXT,
+        experience_years TEXT,
+        message TEXT,
+        cv_path TEXT,
+        proof_path TEXT,
+        status TEXT DEFAULT 'new',
+        created_at TEXT DEFAULT (datetime('now'))
+    )");
+
     $db->exec("CREATE TABLE IF NOT EXISTS valid_credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -91,8 +114,23 @@ try {
     $ensure_column('membership_submissions', 'status', "TEXT DEFAULT 'new'");
     $ensure_column('membership_submissions', 'created_at', "TEXT DEFAULT (datetime('now'))");
 
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+    $ensure_column('trainer_submissions', 'scheme', 'TEXT');
+    $ensure_column('trainer_submissions', 'name', 'TEXT');
+    $ensure_column('trainer_submissions', 'email', 'TEXT');
+    $ensure_column('trainer_submissions', 'phone', 'TEXT');
+    $ensure_column('trainer_submissions', 'location', 'TEXT');
+    $ensure_column('trainer_submissions', 'organisation', 'TEXT');
+    $ensure_column('trainer_submissions', 'qualifications', 'TEXT');
+    $ensure_column('trainer_submissions', 'experience_years', 'TEXT');
+    $ensure_column('trainer_submissions', 'message', 'TEXT');
+    $ensure_column('trainer_submissions', 'cv_path', 'TEXT');
+    $ensure_column('trainer_submissions', 'proof_path', 'TEXT');
+    $ensure_column('trainer_submissions', 'status', "TEXT DEFAULT 'new'");
+    $ensure_column('trainer_submissions', 'created_at', "TEXT DEFAULT (datetime('now'))");
+
+} catch (Throwable $e) {
+    $db = null;
+    $db_error = $e->getMessage();
 }
 
 /**
@@ -100,6 +138,7 @@ try {
  */
 function get_page_content($page_id) {
     global $db;
+    if (!$db) return [];
     $stmt = $db->prepare("SELECT section_id, content FROM site_content WHERE page_id = ?");
     $stmt->execute([$page_id]);
     $results = $stmt->fetchAll();
