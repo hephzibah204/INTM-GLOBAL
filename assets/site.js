@@ -450,27 +450,36 @@
       const titleText = valid ? 'Credential Verified' : 'Verification Result';
 
       const field = (label, value) => {
-        const safe = value && String(value).trim() ? String(value) : '—';
+        const safe = value && String(value).trim() ? String(value) : '';
+        if (!safe) return '';
         return `<div class="verify-field"><div class="verify-label">${label}</div><div class="verify-value">${safe}</div></div>`;
       };
 
-      const fields = [];
-      fields.push(field('Name', cred && cred.name));
-      fields.push(field('Credential ID', cred && cred.credential_id));
-      fields.push(field('Credential Type', cred && cred.type));
-      fields.push(field('Status', cred && cred.status));
-      fields.push(field('Date Issued', cred && cred.issued_date));
-      fields.push(field('Qualification', cred && cred.qualification));
-      fields.push(field('Grade', cred && cred.grade));
+      const fields = [
+        field('Name', cred && cred.name),
+        field('Credential ID', cred && cred.credential_id),
+        field('Credential Type', cred && cred.type),
+        field('Status', cred && cred.status),
+        field('Date Issued', cred && cred.issued_date),
+        field('Qualification', cred && cred.qualification),
+        field('Grade', cred && cred.grade)
+      ].filter(Boolean);
+
+      const resultTitleIcon = valid ? '✅' : (pillClass === 'warn' ? '⚠️' : '❌');
+      const headerStyle = valid
+        ? 'background: linear-gradient(135deg, rgba(58,90,62,0.98), rgba(47,78,51,0.98)); color: white;'
+        : (pillClass === 'warn'
+          ? 'background: linear-gradient(135deg, rgba(245,124,0,0.14), rgba(255,255,255,1));'
+          : 'background: linear-gradient(135deg, rgba(198,40,40,0.12), rgba(255,255,255,1));');
 
       verifyResult.innerHTML = `
-        <div class="verify-result-header">
-          <div class="verify-result-title">${titleText}</div>
+        <div class="verify-result-header" style="${headerStyle}">
+          <div class="verify-result-title">${resultTitleIcon} ${titleText}</div>
           <div class="verify-status-pill ${pillClass}">${pillText}</div>
         </div>
         <div class="verify-result-body">
           <p class="verify-message">${msg}</p>
-          <div class="verify-grid">${fields.join('')}</div>
+          ${fields.length ? `<div class="verify-grid">${fields.join('')}</div>` : ''}
         </div>
         <div class="verify-result-actions">
           <button type="button" class="btn-soft" id="verifyPrintBtn">Print</button>
@@ -483,19 +492,58 @@
 
       if (valid) {
         const layer = document.createElement('div');
-        layer.className = 'balloon-layer';
+        layer.style.position = 'fixed';
+        layer.style.inset = '0';
+        layer.style.pointerEvents = 'none';
+        layer.style.overflow = 'hidden';
+        layer.style.zIndex = '5000';
+
         const colors = ['#e53935', '#43a047', '#1e88e5', '#fdd835', '#8e24aa', '#fb8c00'];
-        const count = 14;
+        const count = 18;
         for (let i = 0; i < count; i++) {
           const b = document.createElement('div');
-          b.className = 'balloon';
-          b.style.left = `${Math.round(Math.random() * 100)}%`;
-          b.style.animationDelay = `${Math.random() * 0.5}s`;
+          const size = 46 + Math.round(Math.random() * 18);
+          const left = Math.round(Math.random() * 100);
+          const delay = Math.random() * 220;
+          const drift = -40 + Math.random() * 80;
+          const duration = 2400 + Math.random() * 700;
+
+          b.style.position = 'absolute';
+          b.style.left = `${left}%`;
+          b.style.bottom = `-${120 + Math.round(Math.random() * 60)}px`;
+          b.style.width = `${size}px`;
+          b.style.height = `${Math.round(size * 1.25)}px`;
+          b.style.borderRadius = '50% 50% 48% 48%';
           b.style.background = colors[i % colors.length];
+          b.style.opacity = '0.95';
+          b.style.boxShadow = '0 18px 26px rgba(0,0,0,0.10)';
+
+          const string = document.createElement('div');
+          string.style.position = 'absolute';
+          string.style.left = '50%';
+          string.style.bottom = '-32px';
+          string.style.width = '2px';
+          string.style.height = '40px';
+          string.style.background = 'rgba(0,0,0,0.18)';
+          string.style.transform = 'translateX(-50%)';
+          b.appendChild(string);
+
           layer.appendChild(b);
+
+          window.setTimeout(() => {
+            b.animate(
+              [
+                { transform: 'translate3d(0,0,0) rotate(0deg)', opacity: 0.96 },
+                { transform: `translate3d(${Math.round(drift)}px,-65vh,0) rotate(6deg)`, opacity: 0.92 },
+                { transform: `translate3d(${Math.round(drift * -0.5)}px,-115vh,0) rotate(-8deg)`, opacity: 0 }
+              ],
+              { duration, easing: 'ease-in', fill: 'forwards' }
+            );
+          }, delay);
         }
+
         document.body.appendChild(layer);
-        window.setTimeout(() => layer.remove(), 3200);
+        window.setTimeout(() => layer.remove(), 3800);
       }
     } catch (_) {
       verifyResult.innerHTML = '<div class="verify-result-header"><div class="verify-result-title">Verification Result</div><div class="verify-status-pill bad">Error</div></div><div class="verify-result-body"><p class="verify-message">An error occurred during verification.</p></div>';
