@@ -91,6 +91,13 @@ if (!isset($_SESSION['admin_logged_in'])) {
         /* Modal for Detail View */
         #detailModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; padding: 15px; }
         #detailModal .content { background:white; width:100%; max-width:600px; border-radius:12px; padding:25px; position:relative; max-height: 90vh; overflow-y: auto; }
+        .detail-row { display:flex; flex-direction:column; gap:4px; padding:10px 0; border-bottom:1px solid #f0f0f0; }
+        .detail-row:last-child { border-bottom:none; }
+        .detail-row label { font-size:11px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:0.5px; }
+        .detail-row span { font-size:14px; color:#333; word-break:break-all; }
+        .file-link { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:var(--primary); color:white; border-radius:6px; text-decoration:none; font-size:13px; font-weight:600; margin-top:4px; transition:opacity 0.2s; }
+        .file-link:hover { opacity:0.85; }
+        .file-link.download { background:#b5874a; }
         
         /* Mobile Breakpoints */
         @media (max-width: 768px) {
@@ -389,13 +396,36 @@ if (!isset($_SESSION['admin_logged_in'])) {
             document.getElementById('cms-editor').innerHTML = html;
         }
 
+        // Fields whose values are uploaded file paths (stored as filenames in DB)
+        const FILE_FIELDS = ['cv_path', 'proof_path', 'file_path', 'attachment_path'];
+
+        function renderFieldValue(key, value) {
+            if (!value) return '<span style="color:#aaa;">—</span>';
+            if (FILE_FIELDS.includes(key)) {
+                const url = `uploads/${encodeURIComponent(value)}`;
+                const ext = (value.split('.').pop() || '').toLowerCase();
+                const isViewable = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
+                let html = '';
+                if (isViewable) {
+                    html += `<a class="file-link" href="${url}" target="_blank" rel="noopener">👁 View File</a> `;
+                }
+                html += `<a class="file-link download" href="${url}" download="${value}">⬇ Download</a>`;
+                html += `<div style="font-size:12px; color:#aaa; margin-top:4px;">${value}</div>`;
+                return html;
+            }
+            return `<span>${String(value).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`;
+        }
+
         function viewDetail(type, id) {
             const row = currentData.submissions[type].find(r => r.id == id);
             let body = '';
             for(let key in row) {
                 if(['id', 'status', 'created_at'].includes(key)) continue;
-                body += `<div class="detail-row"><label>${key.toUpperCase()}</label><span>${row[key]}</span></div>`;
+                body += `<div class="detail-row"><label>${key.replace(/_/g,' ').toUpperCase()}</label>${renderFieldValue(key, row[key])}</div>`;
             }
+            // Show status & date at bottom
+            body += `<div class="detail-row"><label>STATUS</label><span>${row.status}</span></div>`;
+            body += `<div class="detail-row"><label>DATE</label><span>${row.created_at}</span></div>`;
             document.getElementById('detail-body').innerHTML = body;
             document.getElementById('detailModal').style.display = 'flex';
             
