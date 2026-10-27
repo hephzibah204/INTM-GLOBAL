@@ -128,6 +128,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <div class="menu-item" onclick="switchView('contact', this)">✉️ Messages</div>
             <div class="menu-item" onclick="switchView('credentials', this)">🛡️ Credentials</div>
             <div class="menu-item" onclick="switchView('content', this)">📝 Content CMS</div>
+            <div class="menu-item" onclick="switchView('update', this)">🔄 System Update</div>
         </div>
         <div style="padding:20px; border-top:1px solid rgba(255,255,255,0.1);">
             <a href="api/admin_logout.php" style="color:rgba(255,255,255,0.5); text-decoration:none; font-size:14px;">Logout</a>
@@ -217,6 +218,62 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <button class="btn-primary" onclick="saveCMS()" style="padding:8px 16px; background:var(--primary); color:white; border:none; border-radius:6px; cursor:pointer;">Save All Changes</button>
             </div>
             <div id="cms-editor" style="display:grid; gap:20px;"></div>
+        </div>
+
+        <!-- SYSTEM UPDATE VIEW -->
+        <div id="view-update" class="view-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <h3 style="margin:0; font-size:18px;">GitHub System Update</h3>
+                    <p style="margin:4px 0 0; font-size:13px; color:#666;">Update INTM Global directly from GitHub without using command-line Git.</p>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-primary" id="btnCheckUpdate" onclick="checkForUpdates()" style="padding:9px 18px; background:var(--primary); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+                        <span>🔍</span> Check for Updates
+                    </button>
+                    <button class="btn-primary" id="btnApplyUpdate" onclick="applySystemUpdate()" style="padding:9px 18px; background:#b5874a; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; display:none; align-items:center; gap:6px;">
+                        <span>⬇️</span> Update System Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Version Status Cards -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-bottom:24px;">
+                <div style="background:white; padding:20px; border-radius:12px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <div style="font-size:12px; text-transform:uppercase; color:#888; font-weight:700; letter-spacing:0.5px;">Current Version</div>
+                            <div id="currentVersionSha" style="font-size:20px; font-weight:700; color:var(--primary); margin:6px 0;">Loading...</div>
+                        </div>
+                        <span id="updateBadge" style="display:inline-block; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700; background:#eee; color:#666;">Checking...</span>
+                    </div>
+                    <div id="currentVersionDetails" style="font-size:13px; color:#555; line-height:1.6; margin-top:8px;">
+                        Loading version info...
+                    </div>
+                </div>
+
+                <div style="background:white; padding:20px; border-radius:12px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="font-size:12px; text-transform:uppercase; color:#888; font-weight:700; letter-spacing:0.5px;">Latest on GitHub</div>
+                    <div id="latestVersionSha" style="font-size:20px; font-weight:700; color:#333; margin:6px 0;">—</div>
+                    <div id="latestVersionDetails" style="font-size:13px; color:#555; line-height:1.6; margin-top:8px;">
+                        Click "Check for Updates" to compare with the GitHub repository.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety & Data Protection Notice -->
+            <div style="background:rgba(90,122,94,0.08); border-left:4px solid var(--primary); padding:16px 20px; border-radius:0 8px 8px 0; margin-bottom:24px;">
+                <div style="font-weight:700; color:var(--primary); font-size:14px; margin-bottom:4px;">🔒 Data Protection Guarantee</div>
+                <div style="font-size:13px; color:#444; line-height:1.6;">
+                    Updating downloads the latest templates, API endpoints, assets, and styling directly from GitHub.
+                    Your live database (<code>intm_submissions.db</code>), member registrations, certificates, and uploaded files in <code>uploads/</code> are <strong>strictly protected and never overwritten</strong>.
+                </div>
+            </div>
+
+            <!-- Console Log Output -->
+            <div style="background:#1e1e1e; border-radius:8px; padding:16px; color:#e0e0e0; font-family:Consolas, Monaco, monospace; font-size:13px; max-height:280px; overflow-y:auto;" id="updateConsole">
+                <div style="color:#888;">[Ready] System update manager initialized. Ready to check for updates.</div>
+            </div>
         </div>
     </div>
 
@@ -484,6 +541,177 @@ if (!isset($_SESSION['admin_logged_in'])) {
             const sidebar = document.getElementById('sidebar');
             if (sidebar && sidebar.classList.contains('open') && typeof toggleSidebar === 'function') {
                 toggleSidebar();
+            }
+
+            if (view === 'update') {
+                checkForUpdates();
+            }
+        }
+
+        async function checkForUpdates() {
+            const btn = document.getElementById('btnCheckUpdate');
+            const applyBtn = document.getElementById('btnApplyUpdate');
+            const badge = document.getElementById('updateBadge');
+            const consoleBox = document.getElementById('updateConsole');
+            const curSha = document.getElementById('currentVersionSha');
+            const curDetails = document.getElementById('currentVersionDetails');
+            const latSha = document.getElementById('latestVersionSha');
+            const latDetails = document.getElementById('latestVersionDetails');
+
+            const log = (msg, color = '#e0e0e0') => {
+                if (!consoleBox) return;
+                const d = new Date().toLocaleTimeString();
+                consoleBox.innerHTML += `<div style="color:${color}; margin-top:4px;">[${d}] ${msg}</div>`;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            };
+
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+            }
+            if (badge) {
+                badge.textContent = 'Checking...';
+                badge.style.background = '#eee';
+                badge.style.color = '#666';
+            }
+
+            log('Checking repository status with GitHub API...', '#9cdcfe');
+
+            try {
+                const res = await fetch('api/admin_update.php?action=check', { cache: 'no-store' });
+                const json = await res.json().catch(() => null);
+
+                if (!res.ok || !json || !json.ok) {
+                    const err = (json && json.error) || 'Failed to check updates from GitHub.';
+                    log(`Error: ${err}`, '#f48771');
+                    if (badge) {
+                        badge.textContent = 'Check Failed';
+                        badge.style.background = 'rgba(244,135,113,0.2)';
+                        badge.style.color = '#f48771';
+                    }
+                    return;
+                }
+
+                const cur = json.current || {};
+                const lat = json.latest || {};
+
+                if (curSha) curSha.textContent = cur.short_sha || cur.sha?.slice(0, 7) || 'Current';
+                if (curDetails) {
+                    curDetails.innerHTML = `
+                        <div><strong>Message:</strong> ${cur.message || '—'}</div>
+                        <div style="font-size:12px; color:#888; margin-top:4px;"><strong>Updated:</strong> ${cur.last_updated || '—'}</div>
+                    `;
+                }
+
+                if (latSha) latSha.textContent = lat.short_sha || lat.sha?.slice(0, 7) || '—';
+                if (latDetails) {
+                    latDetails.innerHTML = `
+                        <div><strong>Latest Commit:</strong> ${lat.message || '—'}</div>
+                        <div style="font-size:12px; color:#888; margin-top:4px;">
+                            <strong>By:</strong> ${lat.author || '—'} &bull; 
+                            <a href="${lat.url}" target="_blank" rel="noopener" style="color:var(--primary); text-decoration:none;">View on GitHub ↗</a>
+                        </div>
+                    `;
+                }
+
+                if (json.update_available) {
+                    if (badge) {
+                        badge.textContent = 'Update Available';
+                        badge.style.background = 'rgba(245,124,0,0.15)';
+                        badge.style.color = '#e65100';
+                    }
+                    if (applyBtn) applyBtn.style.display = 'inline-flex';
+                    log(`Update found! Latest commit: ${lat.short_sha} (${lat.message})`, '#4ec9b0');
+                } else {
+                    if (badge) {
+                        badge.textContent = 'Up to Date';
+                        badge.style.background = 'rgba(46,125,50,0.15)';
+                        badge.style.color = '#2e7d32';
+                    }
+                    if (applyBtn) applyBtn.style.display = 'none';
+                    log('System is up to date with the main branch on GitHub.', '#4ec9b0');
+                }
+            } catch (e) {
+                log(`Network error while checking updates: ${e.message}`, '#f48771');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+            }
+        }
+
+        async function applySystemUpdate() {
+            if (!confirm('Are you sure you want to update the system from GitHub now?\n\nCode files will be updated to the latest commit. Database and uploads will remain untouched.')) {
+                return;
+            }
+
+            const applyBtn = document.getElementById('btnApplyUpdate');
+            const checkBtn = document.getElementById('btnCheckUpdate');
+            const badge = document.getElementById('updateBadge');
+            const consoleBox = document.getElementById('updateConsole');
+
+            const log = (msg, color = '#e0e0e0') => {
+                if (!consoleBox) return;
+                const d = new Date().toLocaleTimeString();
+                consoleBox.innerHTML += `<div style="color:${color}; margin-top:4px;">[${d}] ${msg}</div>`;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            };
+
+            if (applyBtn) {
+                applyBtn.disabled = true;
+                applyBtn.style.opacity = '0.7';
+                applyBtn.innerHTML = '<span>⏳</span> Updating...';
+            }
+            if (checkBtn) checkBtn.disabled = true;
+            if (badge) {
+                badge.textContent = 'Updating...';
+                badge.style.background = 'rgba(30,136,229,0.15)';
+                badge.style.color = '#1565c0';
+            }
+
+            log('Initiating direct update from GitHub...', '#9cdcfe');
+            log('Downloading repository archive and extracting safely...', '#ce9178');
+
+            try {
+                const res = await fetch('api/admin_update.php?action=apply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'apply' })
+                });
+
+                const json = await res.json().catch(() => null);
+
+                if (!res.ok || !json || !json.ok) {
+                    const err = (json && json.error) || 'Update failed during extraction.';
+                    log(`Update failed: ${err}`, '#f48771');
+                    alert(`Update Error: ${err}`);
+                    if (badge) {
+                        badge.textContent = 'Update Failed';
+                        badge.style.background = 'rgba(244,135,113,0.2)';
+                        badge.style.color = '#f48771';
+                    }
+                    return;
+                }
+
+                log(`Successfully updated ${json.files_updated_count} files!`, '#4ec9b0');
+                if (json.version) {
+                    log(`Current commit is now: ${json.version.short_sha} (${json.version.message})`, '#4ec9b0');
+                }
+                log('Update process complete!', '#4ec9b0');
+
+                alert('System successfully updated from GitHub!\nThe page will now refresh.');
+                window.location.reload();
+            } catch (e) {
+                log(`Network error during update: ${e.message}`, '#f48771');
+                alert(`Network error: ${e.message}`);
+            } finally {
+                if (applyBtn) {
+                    applyBtn.disabled = false;
+                    applyBtn.style.opacity = '1';
+                    applyBtn.innerHTML = '<span>⬇️</span> Update System Now';
+                }
+                if (checkBtn) checkBtn.disabled = false;
             }
         }
 
