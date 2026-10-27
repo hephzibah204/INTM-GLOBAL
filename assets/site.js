@@ -409,22 +409,26 @@
   const certForm = document.getElementById('certForm');
   const memberVerifyForm = document.getElementById('memberVerifyForm');
 
-  if (tabButtons.length && certificateTab && membershipTab && verifyResult) {
-    const switchTab = (activeBtn, tabId) => {
+  const switchTab = (activeBtn, tabId) => {
+    if (tabButtons.length) {
       tabButtons.forEach((b) => {
         b.classList.remove('active');
         b.style.borderBottomColor = 'transparent';
         b.style.color = 'var(--soft)';
       });
+    }
+    if (activeBtn) {
       activeBtn.classList.add('active');
       activeBtn.style.borderBottomColor = 'var(--sage)';
       activeBtn.style.color = 'var(--sage-dark)';
+    }
 
-      certificateTab.style.display = tabId === 'certificate' ? 'block' : 'none';
-      membershipTab.style.display = tabId === 'membership' ? 'block' : 'none';
-      verifyResult.style.display = 'none';
-    };
+    if (certificateTab) certificateTab.style.display = tabId === 'certificate' ? 'block' : 'none';
+    if (membershipTab) membershipTab.style.display = tabId === 'membership' ? 'block' : 'none';
+    if (verifyResult) verifyResult.style.display = 'none';
+  };
 
+  if (tabButtons.length && certificateTab && membershipTab && verifyResult) {
     tabButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const tabId = btn.getAttribute('data-tab');
@@ -562,5 +566,34 @@
       e.preventDefault();
       handleVerify(memberVerifyForm, 'Membership');
     });
+  }
+
+  // Handle direct verification link or QR code parameters (?id=... or ?cert=...)
+  if (certForm || memberVerifyForm) {
+    const queryId = (getUrlParam('id') || getUrlParam('cert') || getUrlParam('credential_id') || getUrlParam('code') || '').trim();
+    const queryType = (getUrlParam('type') || '').trim().toLowerCase();
+
+    if (queryId) {
+      const isMember = queryType === 'membership' || queryType === 'member' || /-(?:MEM|MBR)-/i.test(queryId);
+      const targetTab = isMember ? 'membership' : 'certificate';
+      const targetForm = isMember ? memberVerifyForm : certForm;
+      const targetType = isMember ? 'Membership' : 'Certificate';
+
+      if (tabButtons && tabButtons.length) {
+        const targetBtn = Array.from(tabButtons).find((b) => b.getAttribute('data-tab') === targetTab);
+        if (targetBtn && typeof switchTab === 'function') {
+          switchTab(targetBtn, targetTab);
+        }
+      }
+
+      if (targetForm) {
+        const input = targetForm.querySelector('[name="credential_id"]');
+        if (input) input.value = queryId;
+        handleVerify(targetForm, targetType);
+        if (verifyResult) {
+          verifyResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
   }
 })();

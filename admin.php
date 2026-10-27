@@ -268,9 +268,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </div>
 
                 <div style="margin-bottom:15px;">
-                    <div style="font-size:12px; color:#666; margin-bottom:6px;">Credential ID</div>
-                    <div id="credPreview" style="background:#f8f9fa; border:1px solid #e1e4e8; border-radius:8px; padding:10px 12px; font-size:13px; color:#333;">Will generate after save</div>
-                    <div style="font-size:12px; color:#777; margin-top:6px;">Only Name and Date Issued are required. ID numbering is automatic.</div>
+                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Credential ID (Optional)</label>
+                    <input type="text" name="credential_id" id="credentialIdInput" placeholder="Leave blank to auto-generate" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; text-transform:uppercase;">
+                    <div id="credPreview" style="background:#f8f9fa; border:1px solid #e1e4e8; border-radius:8px; padding:8px 12px; font-size:12px; color:#555; margin-top:6px;">Will generate after save</div>
+                    <div style="font-size:11px; color:#777; margin-top:4px;">Leave blank to auto-generate by year and sequence, or enter a specific Certificate ID.</div>
                 </div>
                 <div style="margin-bottom:20px;">
                     <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">Initial Status</label>
@@ -584,13 +585,19 @@ if (!isset($_SESSION['admin_logged_in'])) {
             const preview = document.getElementById('credPreview');
             if (!form || !preview) return;
 
+            const customId = (form.querySelector('[name="credential_id"]')?.value || '').trim();
+            if (customId) {
+                preview.innerHTML = `Using manual ID: <strong>${customId.toUpperCase()}</strong>`;
+                return;
+            }
+
             const type = (form.querySelector('[name="type"]')?.value || 'Certificate').trim();
             const issuedDate = (form.querySelector('[name="issued_date"]')?.value || '').trim();
 
             const defaultPrefix = type === 'Membership' ? prefixDefaults.membership : prefixDefaults.certificate;
             const prefix = defaultPrefix.toUpperCase();
-            const year = issuedDate ? issuedDate.slice(0, 4) : 'YYYY';
-            preview.textContent = `${prefix}-${year}-####`;
+            const year = issuedDate ? issuedDate.slice(0, 4) : new Date().getFullYear();
+            preview.innerHTML = `Auto-generated preview: <strong>${prefix}-${year}-####</strong>`;
         }
 
         (function wireCredPreview() {
@@ -598,9 +605,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
             if (!form) return;
             const typeEl = form.querySelector('[name="type"]');
             const dateEl = form.querySelector('[name="issued_date"]');
+            const idEl = form.querySelector('[name="credential_id"]');
 
             if (typeEl) typeEl.addEventListener('change', updateCredPreview);
             if (dateEl) dateEl.addEventListener('change', updateCredPreview);
+            if (idEl) idEl.addEventListener('input', updateCredPreview);
         })();
 
         (function wirePrefixDefaults() {

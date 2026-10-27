@@ -4,6 +4,14 @@ require_once __DIR__ . '/../db.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 if (!$db) {
     http_response_code(500);
@@ -11,13 +19,54 @@ if (!$db) {
     exit;
 }
 
-if (!isset($_SESSION['admin_logged_in'])) {
+// Support JSON input, form POST, or GET
+$input = [];
+$raw_input = file_get_contents('php://input');
+if (!empty($raw_input)) {
+    $decoded = json_decode($raw_input, true);
+    if (is_array($decoded)) {
+        $input = $decoded;
+    }
+}
+if (empty($input)) {
+    $input = !empty($_POST) ? $_POST : $_GET;
+}
+
+// Authentication Check: Support session OR API key / Bearer / Basic auth
+$is_authenticated = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+
+if (!$is_authenticated) {
+    $auth_header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
+    $api_pass = $input['admin_pass'] ?? $input['api_key'] ?? $input['password'] ?? '';
+    
+    if ($auth_header && preg_match('/Bearer\s+(.*)$/i', $auth_header, $m)) {
+        $token = trim($m[1]);
+        if (hash_equals($admin_pass, $token)) {
+            $is_authenticated = true;
+        }
+    } elseif ($auth_header && preg_match('/Basic\s+(.*)$/i', $auth_header, $m)) {
+        $decoded = base64_decode($m[1]);
+        if ($decoded && str_contains($decoded, ':')) {
+            [$u, $p] = explode(':', $decoded, 2);
+            if (hash_equals($admin_user, $u) && hash_equals($admin_pass, $p)) {
+                $is_authenticated = true;
+            }
+        }
+    } elseif ($api_pass && hash_equals($admin_pass, (string)$api_pass)) {
+        $is_authenticated = true;
+    }
+}
+
+if (!$is_authenticated) {
     http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized. Please login to the admin dashboard or provide valid credentials.']);
     exit;
 }
 
-$input = json_decode(file_get_contents('php://input'), true);
 $action = $input['action'] ?? '';
+if ($action === '' && !empty($input['name'])) {
+    $action = 'add_credential';
+}
 
 $table_map = [
     'contact' => 'contact_submissions',
@@ -29,12 +78,22 @@ $table_map = [
 
 try {
     if ($action === 'status') {
-        $table = $table_map[$input['type']];
+        $table = $table_map[$input['type']] ?? null;
+        if (!$table) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid submission type']);
+            exit;
+        }
         $stmt = $db->prepare("UPDATE $table SET status = ? WHERE id = ?");
         $stmt->execute([$input['status'], $input['id']]);
     } 
     elseif ($action === 'delete') {
-        $table = $table_map[$input['type']];
+        $table = $table_map[$input['type']] ?? null;
+        if (!$table) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid submission type']);
+            exit;
+        }
         $stmt = $db->prepare("DELETE FROM $table WHERE id = ?");
         $stmt->execute([$input['id']]);
     }
@@ -74,11 +133,14 @@ try {
     elseif ($action === 'add_credential') {
         $name = trim((string)($input['name'] ?? ''));
         $credential_id = strtoupper(trim((string)($input['credential_id'] ?? '')));
-        $type_in = trim((string)($input['type'] ?? ''));
+        $type_in = trim((string)($input['type'] ?? 'Certificate'));
         $status_in = trim((string)($input['status'] ?? 'Active'));
 
         $issued_date = trim((string)($input['issued_date'] ?? ''));
-        $prefix_in = '';
+        if ($issued_date === '') {
+            $issued_date = date('Y-m-d');
+        }
+
         $qualification = trim((string)($input['qualification'] ?? ''));
         $grade = trim((string)($input['grade'] ?? ''));
 
@@ -89,11 +151,11 @@ try {
             'membership' => 'Membership',
             'member' => 'Membership'
         ];
-        $type = $type_map[$type_key] ?? $type_in;
+        $type = $type_map[$type_key] ?? 'Certificate';
 
-        if ($name === '' || $type === '' || $issued_date === '') {
+        if ($name === '') {
             http_response_code(400);
-            echo json_encode(['error' => 'Name, Date Issued and Type are required']);
+            echo json_encode(['error' => 'Recipient Name is required.']);
             exit;
         }
 
@@ -110,11 +172,8 @@ try {
         } elseif (preg_match('/^\d{4}/', $issued_date, $m)) {
             $year = (int)$m[0];
         }
-
         if (!$year) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Date Issued must be a valid date (e.g., 2026-07-25).']);
-            exit;
+            $year = (int)date('Y');
         }
 
         $seq = null;
@@ -127,7 +186,21 @@ try {
             $seq = $max + 1;
             $credential_id = sprintf('%s-%04d-%04d', $prefix, $year, $seq);
         } else {
-            $seq = null;
+            // Check if credential_id already exists to prevent vague constraint crash
+            $check = $db->prepare("SELECT id FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");
+            $check->execute([$credential_id]);
+            if ($check->fetchColumn()) {
+                http_response_code(400);
+                echo json_encode(['error' => "Credential ID '{$credential_id}' is already registered in the registry."]);
+                exit;
+            }
+
+            // Extract prefix/seq if ID follows standard pattern
+            if (preg_match('/^(.*)-(\d{4})-(\d+)$/', $credential_id, $m)) {
+                $prefix = $m[1];
+                $year = (int)$m[2];
+                $seq = (int)$m[3];
+            }
         }
 
         $stmt = $db->prepare("INSERT INTO valid_credentials (name, credential_id, type, prefix, seq, issued_date, issued_year, qualification, grade, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -137,10 +210,10 @@ try {
             $db->commit();
         }
 
-        $check = $db->prepare("SELECT id FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");
+        $check = $db->prepare("SELECT * FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");
         $check->execute([$credential_id]);
-        $new_id = $check->fetchColumn();
-        if (!$new_id) {
+        $row = $check->fetch();
+        if (!$row) {
             http_response_code(500);
             echo json_encode(['error' => 'Credential save failed. Please try again.']);
             exit;
@@ -149,6 +222,7 @@ try {
         echo json_encode([
             'success' => true,
             'credential_id' => $credential_id,
+            'credential' => $row,
             'db_file' => basename($db_path)
         ]);
         exit;
@@ -166,4 +240,3 @@ try {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }
-?>

@@ -185,11 +185,11 @@
         <div class="tab-content active" id="certificate-tab" style="display:block;">
           <div class="form-card" style="background:white; padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
             <h3>Verify a <em>Certificate</em></h3>
-            <p style="margin-bottom: 24px; color: var(--mid); font-size: 14px;">Enter the unique Certificate ID found on the issued document.</p>
+            <p style="margin-bottom: 24px; color: var(--mid); font-size: 14px;">Enter the unique Certificate ID found on the issued document or award.</p>
             <form id="certForm">
               <div class="form-group">
                 <label>Certificate ID</label>
-                <input type="text" name="credential_id" placeholder="e.g. INTM-CERT-2025-001" required>
+                <input type="text" name="credential_id" placeholder="e.g. INTM-CERT-2026-0001" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
               </div>
               <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer;">Verify Certificate</button>
             </form>
@@ -203,7 +203,7 @@
             <form id="memberVerifyForm">
               <div class="form-group">
                 <label>Member ID</label>
-                <input type="text" name="credential_id" placeholder="e.g. INTM-MEM-12345" required>
+                <input type="text" name="credential_id" placeholder="e.g. INTM-MEM-2026-0001" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
               </div>
               <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer;">Check Membership Status</button>
             </form>
