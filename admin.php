@@ -350,7 +350,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         
         async function loadData() {
             try {
-                const res = await fetch('api/admin_data.php', { cache: 'no-store' });
+                const res = await fetch('api/admin_data.php?_t=' + Date.now(), { cache: 'no-store' });
                 if (res.status === 401) {
                     window.location.href = 'admin.php';
                     return;
@@ -420,23 +420,31 @@ if (!isset($_SESSION['admin_logged_in'])) {
             });
 
             // Render Credentials
-            let cHtml = `<table><thead><tr><th>Name</th><th>ID</th><th>Type</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
-            currentData.credentials.forEach(c => {
-                const opts = ['Active', 'Inactive', 'Revoked', 'Expired'].map(s => `<option value="${s}" ${c.status === s ? 'selected' : ''}>${s}</option>`).join('');
-                cHtml += `
-                    <tr>
-                        <td>${c.name}</td>
-                        <td><code>${c.credential_id}</code></td>
-                        <td>${c.type}</td>
-                        <td>
-                            <select onchange="updateCredStatus(${c.id}, this.value)" style="padding:6px 8px; border:1px solid #ddd; border-radius:6px; background:white;">
-                                ${opts}
-                            </select>
-                        </td>
-                        <td><button class="btn-action" onclick="deleteCred(${c.id})">Delete</button></td>
-                    </tr>
-                `;
-            });
+            const creds = currentData.credentials || [];
+            let cHtml = `<table><thead><tr><th>Name</th><th>Credential ID</th><th>Type</th><th>Qualification</th><th>Date Issued</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
+            if (creds.length === 0) {
+                cHtml += `<tr><td colspan="7" style="text-align:center; padding:24px; color:#888;">No credentials found. Click "+ Add Credential" to register one.</td></tr>`;
+            } else {
+                creds.forEach(c => {
+                    const opts = ['Active', 'Inactive', 'Revoked', 'Expired'].map(s => `<option value="${s}" ${c.status === s ? 'selected' : ''}>${s}</option>`).join('');
+                    const qual = [c.qualification, c.grade ? `(${c.grade})` : ''].filter(Boolean).join(' ');
+                    cHtml += `
+                        <tr>
+                            <td><strong>${c.name}</strong></td>
+                            <td><code>${c.credential_id}</code></td>
+                            <td>${c.type}</td>
+                            <td style="font-size:13px; color:#555;">${qual || '—'}</td>
+                            <td>${c.issued_date || (c.created_at ? c.created_at.split(' ')[0] : '—')}</td>
+                            <td>
+                                <select onchange="updateCredStatus(${c.id}, this.value)" style="padding:6px 8px; border:1px solid #ddd; border-radius:6px; background:white;">
+                                    ${opts}
+                                </select>
+                            </td>
+                            <td><button class="btn-action" onclick="deleteCred(${c.id})">Delete</button></td>
+                        </tr>
+                    `;
+                });
+            }
             cHtml += `</tbody></table>`;
             document.getElementById('credentials-table').innerHTML = cHtml;
         }
@@ -780,32 +788,51 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
         document.getElementById('addCredForm').onsubmit = async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Saving...';
+            }
+
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             data.action = 'add_credential';
 
-            const res = await fetch('api/admin_actions.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+            try {
+                const res = await fetch('api/admin_actions.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
 
-            const json = await res.json().catch(() => null);
-            if (!res.ok) {
-                alert((json && json.error) || 'Add credential failed.');
-                return;
+                const json = await res.json().catch(() => null);
+                if (!res.ok) {
+                    alert((json && json.error) || 'Add credential failed.');
+                    return;
+                }
+
+                closeCredModal();
+                e.target.reset();
+
+                // Reload data immediately with fresh cache-busting request
+                await loadData();
+
+                // Switch to credentials view
+                const credsBtn = document.querySelector('.menu-item[onclick*="credentials"]');
+                if (credsBtn) switchView('credentials', credsBtn);
+
+                if (json && json.credential_id) {
+                    const dbFile = json.db_file ? ` (Database: ${json.db_file})` : '';
+                    alert(`✅ Credential successfully created and saved!\n\nCredential ID: ${json.credential_id}${dbFile}`);
+                }
+            } catch (err) {
+                alert('Network error while saving credential: ' + err.message);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Save Credential';
+                }
             }
-
-            if (json && json.credential_id) {
-                const dbFile = json.db_file ? `\nDB: ${json.db_file}` : '';
-                alert(`Credential created: ${json.credential_id}${dbFile}`);
-            }
-
-            closeCredModal();
-            e.target.reset();
-            await loadData();
-            const credsBtn = document.querySelector('.menu-item[onclick*="credentials"]');
-            if (credsBtn) switchView('credentials', credsBtn);
         };
 
         function updateCredPreview() {

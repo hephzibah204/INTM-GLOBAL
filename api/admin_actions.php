@@ -177,9 +177,17 @@ try {
         }
 
         $seq = null;
+        $started_transaction = false;
+        try {
+            if (!$db->inTransaction()) {
+                $db->beginTransaction();
+                $started_transaction = true;
+            }
+        } catch (Throwable $e) {
+            $started_transaction = false;
+        }
 
         if ($credential_id === '') {
-            $db->exec('BEGIN IMMEDIATE');
             $stmt = $db->prepare("SELECT COALESCE(MAX(seq), 0) AS max_seq FROM valid_credentials WHERE prefix = ? COLLATE NOCASE AND issued_year = ?");
             $stmt->execute([$prefix, $year]);
             $max = (int)($stmt->fetchColumn() ?: 0);
@@ -190,6 +198,9 @@ try {
             $check = $db->prepare("SELECT id FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");
             $check->execute([$credential_id]);
             if ($check->fetchColumn()) {
+                if ($started_transaction || $db->inTransaction()) {
+                    try { $db->rollBack(); } catch (Throwable $ignore) {}
+                }
                 http_response_code(400);
                 echo json_encode(['error' => "Credential ID '{$credential_id}' is already registered in the registry."]);
                 exit;
@@ -203,11 +214,18 @@ try {
             }
         }
 
-        $stmt = $db->prepare("INSERT INTO valid_credentials (name, credential_id, type, prefix, seq, issued_date, issued_year, qualification, grade, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO valid_credentials (name, credential_id, type, prefix, seq, issued_date, issued_year, qualification, grade, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))");
         $stmt->execute([$name, $credential_id, $type, $prefix, $seq, $issued_date, $year, ($qualification ?: null), ($grade ?: null), ($status_in ?: 'Active')]);
 
-        if ($db->inTransaction()) {
-            $db->commit();
+        // Commit transaction and ensure changes are flushed to disk
+        if ($started_transaction || $db->inTransaction()) {
+            try {
+                $db->commit();
+            } catch (Throwable $e) {
+                try { $db->exec('COMMIT'); } catch (Throwable $ignore) {}
+            }
+        } else {
+            try { $db->exec('COMMIT'); } catch (Throwable $ignore) {}
         }
 
         $check = $db->prepare("SELECT * FROM valid_credentials WHERE credential_id = ? COLLATE NOCASE LIMIT 1");

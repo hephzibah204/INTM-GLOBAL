@@ -3,7 +3,9 @@ session_start();
 require_once __DIR__ . '/../db.php';
 
 header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: no-store');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 if (!$db) {
     http_response_code(500);
@@ -34,7 +36,7 @@ try {
         'trainer' => $db->query("SELECT * FROM trainer_submissions ORDER BY created_at DESC")->fetchAll(),
     ];
 
-    $credentials = $db->query("SELECT * FROM valid_credentials ORDER BY created_at DESC")->fetchAll();
+    $credentials = $db->query("SELECT * FROM valid_credentials ORDER BY id DESC")->fetchAll();
     $content = $db->query("SELECT * FROM site_content ORDER BY page_id, section_id")->fetchAll();
 
     $prefix_defaults = [
