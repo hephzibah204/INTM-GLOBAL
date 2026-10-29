@@ -1,10 +1,10 @@
 {
-  "sha": "7f3b4197fa37bc932e2af733c12c9da6de38d8af",
-  "short_sha": "7f3b419",
+  "sha": "e99a7476121c2f1235fc3fe24fdc0aded768f482",
+  "short_sha": "e99a747",
   "branch": "main",
-  "message": "Fix certificate registration and verification; ignore SQLite databases",
+  "message": "Include live production SQLite database and update gitignore",
   "author": "hephzibah204",
-  "date": "2026-10-27 21:19:12 +0100",
+  "date": "2026-10-29 20:21:03 +0100",
   "repository": "https://github.com/hephzibah204/INTM-GLOBAL",
-  "last_updated": "2026-10-27 22:20:00"
+  "last_updated": "2026-10-29 20:21:03"
 }
