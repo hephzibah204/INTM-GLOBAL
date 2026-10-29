@@ -1,12 +1,8 @@
-# SQLite Databases
-*.db
+# SQLite temporary lock and backup files
 *.db-journal
 *.db-wal
 *.db-shm
 *.db.backup.*
-*.sqlite
-*.sqlite3
-intm_submissions.db*
 
 # Local configuration
 config.local.php
