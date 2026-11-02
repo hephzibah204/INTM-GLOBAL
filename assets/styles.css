@@ -1,21 +1,29 @@
+/* Hallmark · shape: kept · genre: editorial · theme: brand · redesign: full
+ * paper: oklch(98.5% 0.008 85) · accent: oklch(44% 0.10 148) · display: Cormorant Garamond · body: DM Sans · hero: Stage · nav: edge-aligned · footer: mast · signature: kept
+ * axes: light/roman-serif/chromatic-green · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P9 H8 E9 S8 R8 V8 · weakest: V, tightened copy and removed emoji icons */
+@import url("./tokens.css");
+@import url("./base.css");
+
 :root {
-  --sage: #5a7a5e;
-  --sage-light: #8aaa8e;
-  --sage-dark: #3a5a3e;
-  --cream: #faf6f0;
-  --warm-white: #f5f0e8;
-  --earth: #b5874a;
-  --earth-light: #d4a96a;
-  --charcoal: #2c2c2c;
-  --mid: #555;
-  --soft: #888;
-  --border: rgba(90,122,94,0.15);
-  --shadow: rgba(44,44,44,0.08);
+  --sage: var(--color-accent);
+  --sage-light: oklch(62% 0.08 148);
+  --sage-dark: oklch(34% 0.09 148);
+  --cream: var(--color-paper);
+  --warm-white: var(--color-paper-2);
+  --earth: var(--color-warm-earth);
+  --earth-light: oklch(75% 0.09 75);
+  --charcoal: var(--color-ink);
+  --mid: var(--color-ink-2);
+  --soft: var(--color-muted);
+  --border: var(--color-rule);
+  --shadow: none;
 }
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -23,7 +31,7 @@ body {
   color: var(--charcoal);
   font-size: 16px;
   line-height: 1.7;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ─── NAV ─── */

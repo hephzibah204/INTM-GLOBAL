@@ -19,3 +19,4 @@ uploads/*
 Thumbs.db
 .idea/
 .vscode/
+.hallmark/
